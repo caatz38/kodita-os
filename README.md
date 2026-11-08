@@ -1,5 +1,7 @@
 # Kodita OS
 
+**Live:** https://caatz38.github.io/kodita-os/
+
 A Windows 11–style desktop in the browser, used as an interactive presentation for **Kodita**: a social project teaching junior high school students to code with Roblox and websites.
 
 Instead of slides in Canva or PowerPoint, the presenter double-clicks folders on a desktop (**Game Dev**, **Web Dev**…), opens lesson files, and each one opens in its own app window.
@@ -29,6 +31,10 @@ npm run dev
 ```
 
 Then open http://localhost:5173.
+
+## Publish
+
+Every push to `main` rebuilds and publishes the site to GitHub Pages automatically (see `.github/workflows/deploy.yml`).
 
 ## Edit the lessons
 
