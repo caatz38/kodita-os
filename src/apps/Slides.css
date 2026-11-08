@@ -246,6 +246,10 @@
 .sl-code-points { flex: 1; padding-top: 1cqi !important; }
 .sl-code-points li { font-size: 2.2cqi; }
 
+/* full-bleed image slides (e.g. Canva pages) */
+.sl-full { background: #fff; }
+.sl-full-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; }
+
 /* image slides */
 .sl-image-body { align-items: stretch; }
 .sl-image { flex: 1; min-height: 0; display: grid; place-items: center; border-radius: 1.4cqi; background: #f1f4ff; overflow: hidden; color: #7a83a8; font-size: 2cqi; }

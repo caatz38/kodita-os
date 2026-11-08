@@ -17,141 +17,65 @@
 //    { layout:'bullets', title, points:['...', '...'] }
 //    { layout:'code',    title, code:'...', points:[...] }  code on the left, notes on the right
 //    { layout:'image',   title, image:'media/x.png', caption }
+//    { layout:'full',    image:'media/x.jpg', alt }               a finished slide image (e.g. a Canva page)
 //
 //  Media files (images/videos) go in the  public/media/  folder.
 //  Optional on any item:  description:'...'  (shown in Explorer's Details pane)
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Turns a folder of exported slide images (page-01.jpg, page-02.jpg, …) into slides.
+function canvaPages(folder, texts) {
+  return texts.map((alt, i) => ({ layout: 'full', image: `media/${folder}/page-${String(i + 1).padStart(2, '0')}.jpg`, alt }));
+}
+
 export const desktop = [
   // ───────────────────────────── GAME DEV ─────────────────────────────
+  // Slides come from the Canva deck "Roblox Step Coding" (exported as images
+  // into public/media/roblox-step-coding/). To update: re-export the pages
+  // from Canva with the same file names.
   {
     type: 'folder',
     name: 'Game Dev',
-    description: 'Belajar membuat game sendiri di Roblox Studio.',
+    description: 'Roblox Studio Gamedev — Roblox Step Coding.',
     children: [
       {
         type: 'slides',
-        name: '01 - Apa itu Roblox Studio',
-        description: 'Pengenalan Roblox Studio dan apa saja yang bisa dibuat.',
-        slides: [
-          { layout: 'title', title: 'Apa itu Roblox Studio?', subtitle: 'Bikin game sendiri, dimainkan jutaan orang' },
-          {
-            layout: 'bullets',
-            title: 'Roblox vs Roblox Studio',
-            points: [
-              'Roblox = tempat kamu MAIN game',
-              'Roblox Studio = tempat kamu MEMBUAT game',
-              'Gratis, bisa dipakai di Windows dan Mac',
-              'Game buatanmu bisa langsung dimainkan teman-temanmu',
-            ],
-          },
-          {
-            layout: 'bullets',
-            title: 'Apa saja yang bisa kita buat?',
-            points: ['🏃 Obby (rintangan parkour)', '🏠 Tycoon & simulator', '🧟 Game survival', '🏎️ Game balapan', '…dan apa pun yang kamu bayangkan!'],
-          },
-          {
-            layout: 'bullets',
-            title: 'Kenapa belajar ini?',
-            points: [
-              'Belajar logika & problem solving sambil bersenang-senang',
-              'Bahasa pemrogramannya (Luau) mudah untuk pemula',
-              'Developer Roblox ada yang berpenghasilan dari game-nya!',
-            ],
-          },
-          { layout: 'section', title: 'Siap? Ayo mulai! 🚀', subtitle: 'Buka Roblox Studio di komputermu' },
-        ],
-      },
-      {
-        type: 'slides',
-        name: '02 - Mengenal Antarmuka',
-        description: 'Bagian-bagian penting di layar Roblox Studio.',
-        slides: [
-          { layout: 'title', title: 'Mengenal Antarmuka', subtitle: 'Tur singkat Roblox Studio' },
-          {
-            layout: 'bullets',
-            title: 'Bagian penting di layar',
-            points: [
-              'Viewport — dunia 3D tempat kamu membangun',
-              'Explorer — daftar semua benda di game',
-              'Properties — mengubah warna, ukuran, bahan',
-              'Toolbox — model & aset siap pakai',
-            ],
-          },
-          {
-            layout: 'bullets',
-            title: 'Kontrol kamera',
-            points: ['W A S D — bergerak', 'Klik kanan + geser — memutar kamera', 'Scroll — zoom in / zoom out', 'F — fokus ke benda yang dipilih'],
-          },
-          {
-            layout: 'bullets',
-            title: 'Alat utama',
-            points: ['Select — memilih benda', 'Move — memindahkan', 'Scale — mengubah ukuran', 'Rotate — memutar'],
-          },
-        ],
-      },
-      {
-        type: 'slides',
-        name: '03 - Membuat Obby Pertamamu',
-        description: 'Langkah demi langkah membuat obby sederhana.',
-        slides: [
-          { layout: 'title', title: 'Membuat Obby Pertamamu', subtitle: 'Obby = Obstacle course (rintangan)' },
-          {
-            layout: 'bullets',
-            title: 'Langkah 1 — Buat pijakan',
-            points: ['Home → Part → Block', 'Ubah ukuran dengan Scale', 'Centang Anchored supaya tidak jatuh!'],
-          },
-          {
-            layout: 'bullets',
-            title: 'Langkah 2 — Susun rintangan',
-            points: ['Buat beberapa pijakan dengan jarak lompatan', 'Variasikan tinggi dan ukuran', 'Uji dengan tombol Play ▶'],
-          },
-          {
-            layout: 'bullets',
-            title: 'Langkah 3 — Tambahkan lava 🔥',
-            points: ['Buat Part berwarna merah', 'Material: Neon', 'Nanti kita beri script supaya pemain “kalah” saat menyentuhnya'],
-          },
-          { layout: 'section', title: 'Tantangan!', subtitle: 'Buat obby dengan minimal 10 pijakan dalam 15 menit' },
-        ],
-      },
-      {
-        type: 'slides',
-        name: '04 - Dasar Scripting Luau',
-        description: 'Script pertama: lava yang mematikan.',
-        slides: [
-          { layout: 'title', title: 'Dasar Scripting Luau', subtitle: 'Memberi “otak” pada game kita' },
-          {
-            layout: 'code',
-            title: 'Script pertama: Halo!',
-            code: 'print("Halo, Kodita!")',
-            points: ['print() menampilkan tulisan di Output', 'Teks ditulis di antara tanda kutip " "', 'Klik Play, lalu lihat jendela Output'],
-          },
-          {
-            layout: 'code',
-            title: 'Variabel',
-            code: 'local nama = "Budi"\nlocal nyawa = 3\n\nprint(nama .. " punya " .. nyawa .. " nyawa")',
-            points: ['local = membuat variabel baru', 'Variabel = kotak untuk menyimpan data', '.. = menggabungkan teks'],
-          },
-          {
-            layout: 'code',
-            title: 'Lava yang mematikan',
-            code:
-              'local lava = script.Parent\n\nlava.Touched:Connect(function(benda)\n  local manusia = benda.Parent:FindFirstChild("Humanoid")\n  if manusia then\n    manusia.Health = 0\n  end\nend)',
-            points: ['Touched = kejadian saat sesuatu menyentuh lava', 'Humanoid = “nyawa” karakter pemain', 'Health = 0 → pemain kembali ke awal'],
-          },
-        ],
+        name: 'Roblox Step Coding',
+        description: 'Roblox Studio intro, tools & navigation, step coding lava, shortcut & challenge.',
+        slides: canvaPages('roblox-step-coding', [
+          'Roblox Studio Gamedev — Roblox Step Coding',
+          'What you’ll learn today: Roblox Studio Intro, Tools & Navigation, Step Coding Lava, Shortcut & Challenge',
+          'Roblox Studio itu apa sih? Game engine buat bikin game Roblox. Semua game Roblox yang kamu lihat dibikin di sini.',
+          'Cara aksesnya gimana? 2 cara, yaitu lewat website atau download langsung.',
+          '3 Main Panels: Viewport, Explorer, Properties',
+          'Yang biasa digunakan — Penting!!',
+          'Tutor gerakin camera + jalan: nengok = klik kanan (tahan) + geser mouse; maju mundur kanan kiri = W, A, S, D; naik turun = E dan Q; zoom = scroll mouse.',
+          'Shortcut: Undo ⌘Z, Redo ⌘⇧Z, Copy ⌘C, Paste ⌘V, Cut ⌘X, Duplicate ⌘D, Save ⌘S, Find ⌘F, Replace ⌘⌥F, Close Script ⌘W, Reopen Closed Script ⌘⇧T',
+          'Terus cara kita koding-kodingan gimana kak?',
+          'Ini nih: klik tombol “+”, muncul deh. Roblox memakai bahasa pemrograman Lua!',
+          'Contoh penggunaan Lua: digunakan sebagai “Lava” dalam obby. Udah, segini aja? Memang.',
+          'Today’s problem: kalau misalkan player dengan 101 health menyentuh lava, dia hidup atau tidak?',
+          'Roblox Studio — Lesson Completed!',
+        ]),
       },
       { type: 'video', name: 'Demo Roblox Studio', description: 'Taruh video demo di public/media/ lalu isi src.', src: '' },
       {
         type: 'quiz',
-        name: 'Kuis Game Dev',
-        description: '5 pertanyaan seputar Roblox Studio.',
+        name: 'Kuis Roblox Step Coding',
+        description: 'Kuis dari materi Roblox Step Coding.',
         questions: [
-          { q: 'Aplikasi apa yang dipakai untuk MEMBUAT game Roblox?', options: ['Roblox Player', 'Roblox Studio', 'Microsoft Word', 'Paint'], answer: 1 },
-          { q: 'Supaya Part tidak jatuh saat game dimulai, kita harus mencentang…', options: ['CanCollide', 'Transparency', 'Anchored', 'Locked'], answer: 2 },
-          { q: 'Bahasa pemrograman yang dipakai di Roblox adalah…', options: ['Python', 'Luau', 'Java', 'HTML'], answer: 1 },
-          { q: 'Perintah untuk menampilkan tulisan di Output adalah…', options: ['show()', 'write()', 'print()', 'say()'], answer: 2 },
-          { q: 'Panel untuk mengubah warna & ukuran benda bernama…', options: ['Toolbox', 'Output', 'Explorer', 'Properties'], answer: 3 },
+          { q: 'Roblox Studio itu apa?', options: ['Game buat dimainkan', 'Game engine buat bikin game Roblox', 'Aplikasi chat', 'Browser internet'], answer: 1 },
+          { q: 'Ada berapa panel utama (main panels) di Roblox Studio?', options: ['2', '3', '4', '5'], answer: 1 },
+          { q: 'Panel yang BUKAN termasuk 3 main panels adalah…', options: ['Viewport', 'Explorer', 'Properties', 'Toolbox'], answer: 3 },
+          { q: 'Tombol untuk maju, mundur, kanan, kiri adalah…', options: ['Panah atas/bawah', 'W, A, S, D', 'E dan Q', 'Spasi'], answer: 1 },
+          { q: 'Tombol untuk naik dan turun adalah…', options: ['E dan Q', 'W dan S', 'Shift dan Ctrl', 'Z dan X'], answer: 0 },
+          { q: 'Shortcut untuk Duplicate adalah…', options: ['⌘/Ctrl + C', '⌘/Ctrl + V', '⌘/Ctrl + D', '⌘/Ctrl + Z'], answer: 2 },
+          { q: 'Roblox memakai bahasa pemrograman…', options: ['Python', 'Java', 'Lua', 'HTML'], answer: 2 },
+          {
+            q: 'Today’s problem: player dengan 101 health menyentuh lava (script: humanoid.Health = 0). Dia hidup atau tidak?',
+            options: ['Hidup, health-nya sisa 1', 'Tidak — health langsung jadi 0', 'Hidup, karena health lebih dari 100', 'Lava tidak berpengaruh'],
+            answer: 1,
+          },
         ],
       },
     ],

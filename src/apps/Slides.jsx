@@ -13,6 +13,11 @@ export function Slide({ slide, index, total, thumb = false }) {
   const layout = slide.layout || (slide.code ? 'code' : slide.points ? 'bullets' : 'title');
   return (
     <div className={`sl sl-${layout} ${thumb ? 'sl-thumb' : ''}`}>
+      {layout === 'full' && (
+        // A finished slide image (e.g. exported from Canva), edge to edge.
+        <img className="sl-full-img" src={slide.image} alt={slide.alt || ''} draggable={false} loading={thumb ? 'lazy' : 'eager'} />
+      )}
+
       {layout === 'title' && (
         <>
           <div className="sl-blob sl-blob-a" />
@@ -75,7 +80,7 @@ export function Slide({ slide, index, total, thumb = false }) {
         </div>
       )}
 
-      {layout !== 'title' && layout !== 'section' && (
+      {layout !== 'title' && layout !== 'section' && layout !== 'full' && (
         <div className="sl-footer">
           <span><img src={config.logo} alt="" /> Kodita</span>
           <span>{index + 1} / {total}</span>
@@ -120,6 +125,16 @@ function Deck({ item }) {
     document.addEventListener('fullscreenchange', onFs);
     return () => document.removeEventListener('fullscreenchange', onFs);
   }, []);
+
+  // Preload slide images so moving to the next page is instant.
+  useEffect(() => {
+    slides.forEach((sl) => {
+      if (sl.image) {
+        const img = new Image();
+        img.src = sl.image;
+      }
+    });
+  }, [slides]);
 
   // Keep the active thumbnail visible.
   useEffect(() => {
