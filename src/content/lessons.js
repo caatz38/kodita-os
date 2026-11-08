@@ -58,7 +58,6 @@ export const desktop = [
           'Roblox Studio — Lesson Completed!',
         ]),
       },
-      { type: 'video', name: 'Demo Roblox Studio', description: 'Taruh video demo di public/media/ lalu isi src.', src: '' },
       {
         type: 'quiz',
         name: 'Kuis Roblox Step Coding',
