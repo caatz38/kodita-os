@@ -1,0 +1,93 @@
+/* Windows 11 (Fluent) design tokens */
+:root {
+  --font: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", "Inter Variable", system-ui, -apple-system, sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", "Inter Variable", system-ui, sans-serif;
+
+  --accent: #005fb8;
+  --accent-hover: color-mix(in srgb, var(--accent) 90%, white);
+  --accent-text: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+
+  --text: #1b1b1b;
+  --text-2: #5f5f5f;
+  --text-3: #8a8a8a;
+
+  /* Surfaces */
+  --mica: #f3f3f3;                         /* window background */
+  --mica-alt: #eef1f6;
+  --mica-tint: rgba(205, 222, 245, 0.28);   /* wallpaper tint on the active window */
+  --layer: rgba(255, 255, 255, 0.5);       /* content layer inside windows */
+  --layer-solid: #fbfbfb;
+  --card: rgba(255, 255, 255, 0.7);
+  --acrylic: rgba(243, 243, 243, 0.82);    /* start menu, flyouts */
+  --acrylic-strong: rgba(249, 249, 249, 0.92);
+  --taskbar: rgba(238, 238, 238, 0.82);
+  --blur: blur(36px) saturate(170%);
+
+  --subtle-hover: rgba(0, 0, 0, 0.0373);
+  --subtle-press: rgba(0, 0, 0, 0.0241);
+  --control: rgba(255, 255, 255, 0.7);
+  --control-hover: rgba(249, 249, 249, 0.5);
+
+  --stroke: rgba(0, 0, 0, 0.0578);
+  --stroke-strong: rgba(0, 0, 0, 0.1);
+  --stroke-surface: rgba(117, 117, 117, 0.4);
+  --divider: rgba(0, 0, 0, 0.0803);
+
+  --close-red: #c42b1c;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  --shadow-window: 0 32px 64px rgba(0, 0, 0, 0.19), 0 2px 21px rgba(0, 0, 0, 0.15);
+  --shadow-window-inactive: 0 16px 32px rgba(0, 0, 0, 0.14), 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow-flyout: 0 8px 16px rgba(0, 0, 0, 0.14);
+  --shadow-menu: 0 32px 64px rgba(0, 0, 0, 0.19), 0 2px 21px rgba(0, 0, 0, 0.15);
+
+  --taskbar-h: 48px;
+  --ease: cubic-bezier(0.1, 0.9, 0.2, 1);   /* Fluent "decelerate" */
+  --ease-in: cubic-bezier(0.7, 0, 1, 0.5);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --accent-text: #000000;
+  --text: #ffffff;
+  --text-2: #c5c5c5;
+  --text-3: #9a9a9a;
+  --mica: #202020;
+  --mica-alt: #1c1f26;
+  --mica-tint: rgba(40, 60, 100, 0.18);
+  --layer: rgba(58, 58, 58, 0.3);
+  --layer-solid: #272727;
+  --card: rgba(255, 255, 255, 0.05);
+  --acrylic: rgba(36, 36, 36, 0.82);
+  --acrylic-strong: rgba(44, 44, 44, 0.94);
+  --taskbar: rgba(28, 28, 28, 0.85);
+  --subtle-hover: rgba(255, 255, 255, 0.0605);
+  --subtle-press: rgba(255, 255, 255, 0.0419);
+  --control: rgba(255, 255, 255, 0.0605);
+  --control-hover: rgba(255, 255, 255, 0.0837);
+  --stroke: rgba(255, 255, 255, 0.0698);
+  --stroke-strong: rgba(255, 255, 255, 0.093);
+  --stroke-surface: rgba(117, 117, 117, 0.4);
+  --divider: rgba(255, 255, 255, 0.0837);
+  --shadow-window: 0 32px 64px rgba(0, 0, 0, 0.56), 0 2px 21px rgba(0, 0, 0, 0.55);
+  --shadow-window-inactive: 0 16px 32px rgba(0, 0, 0, 0.37), 0 2px 10px rgba(0, 0, 0, 0.37);
+  --shadow-flyout: 0 8px 16px rgba(0, 0, 0, 0.26);
+  color-scheme: dark;
+}
+
+/* Settings → Transparency effects: Off */
+:root.no-transparency {
+  --blur: none;
+  --acrylic: #f3f3f3;
+  --acrylic-strong: #f9f9f9;
+  --taskbar: #eeeeee;
+}
+:root[data-theme="dark"].no-transparency {
+  --acrylic: #2c2c2c;
+  --acrylic-strong: #2c2c2c;
+  --taskbar: #1c1c1c;
+}

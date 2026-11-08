@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!-- Placeholder Kodita logo. Replace this file (or add logo.png and update src/content/config.js). -->
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3ccbf4"/><stop offset="1" stop-color="#0a6ad8"/>
+    </linearGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#ff6a3d"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="21" height="21" rx="4" fill="url(#a)"/>
+  <rect x="25" y="2" width="21" height="21" rx="10.5" fill="url(#b)"/>
+  <rect x="2" y="25" width="21" height="21" rx="4" fill="url(#a)"/>
+  <rect x="25" y="25" width="21" height="21" rx="4" fill="url(#a)"/>
+</svg>

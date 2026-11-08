@@ -1,0 +1,121 @@
+.taskbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--taskbar-h);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  background: var(--taskbar);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-top: 1px solid var(--stroke-strong);
+  color: var(--text);
+}
+
+.tb-hover, .tb-btn, .tb-search {
+  border-radius: var(--radius-sm);
+  transition: background 0.1s;
+}
+.tb-hover:hover, .tb-btn:hover { background: var(--control-hover); box-shadow: inset 0 0 0 1px var(--stroke); }
+.tb-hover:active, .tb-btn:active { background: var(--subtle-press); }
+:root:not([data-theme="dark"]) .tb-hover:hover,
+:root:not([data-theme="dark"]) .tb-btn:hover { background: rgba(255, 255, 255, 0.6); }
+
+/* Left: weather widget */
+.tb-widgets {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 10px 0 8px;
+  margin-left: 4px;
+}
+.tb-sun { color: #f7a71c; font-size: 24px; }
+.tb-weather { display: flex; flex-direction: column; align-items: flex-start; line-height: 15px; font-size: 12px; }
+.tb-temp { font-weight: 600; }
+.tb-cond { color: var(--text-2); }
+
+/* Center */
+.tb-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+.tb-btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.tb-btn > * { transition: transform 0.15s var(--ease); }
+.tb-btn:active > * { transform: scale(0.86); }
+.tb-start.pressed { background: var(--control-hover); box-shadow: inset 0 0 0 1px var(--stroke); }
+:root:not([data-theme="dark"]) .tb-start.pressed { background: rgba(255, 255, 255, 0.6); }
+
+.tb-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 210px;
+  height: 34px;
+  padding: 0 12px;
+  margin: 0 4px;
+  border-radius: 17px;
+  background: var(--control);
+  border: 1px solid var(--stroke-strong);
+  color: var(--text-2);
+  font-size: 13px;
+}
+.tb-search svg { color: var(--text); }
+.tb-search:hover { background: var(--layer-solid); }
+
+/* Right: system tray */
+.tb-tray {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 2px;
+  font-size: 12px;
+}
+.tb-tray button { height: 40px; display: flex; align-items: center; }
+.tb-chevron { width: 28px; justify-content: center; }
+.tb-lang { flex-direction: column; justify-content: center; line-height: 15px; padding: 0 7px; }
+.tb-status { gap: 8px; padding: 0 9px; font-size: 16px; }
+.tb-status svg { width: 16px; height: 16px; }
+.tb-clock { flex-direction: column; justify-content: center; align-items: flex-end; line-height: 16px; padding: 0 8px; }
+.tb-bell { width: 32px; justify-content: center; }
+.tb-peek {
+  width: 12px;
+  height: 100%;
+  margin-left: 2px;
+  border-left: 1px solid transparent;
+}
+.tb-peek:hover { border-left-color: var(--stroke-surface); }
+
+/* Running / active app indicators */
+.tb-active { background: var(--control-hover); box-shadow: inset 0 0 0 1px var(--stroke); }
+:root:not([data-theme="dark"]) .tb-active { background: rgba(255, 255, 255, 0.6); }
+.tb-dot {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 6px;
+  height: 3px;
+  margin-left: -3px;
+  border-radius: 2px;
+  background: var(--text-3);
+  transition: width 0.2s var(--ease), margin 0.2s var(--ease), background 0.2s;
+}
+.tb-dot.active { width: 16px; margin-left: -8px; background: var(--accent); }
+.tb-btn:active > .tb-dot { transform: none; }
+
+.tb-tray .pressed { background: var(--control-hover); box-shadow: inset 0 0 0 1px var(--stroke); }
+:root:not([data-theme="dark"]) .tb-tray .pressed { background: rgba(255, 255, 255, 0.6); }

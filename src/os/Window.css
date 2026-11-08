@@ -1,0 +1,150 @@
+.win {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  background: var(--mica);
+  border: 1px solid var(--stroke-strong);
+  box-shadow: var(--shadow-window);
+  color: var(--text);
+  /* Own GPU layer: moving/animating the window never repaints the desktop */
+  will-change: transform;
+  contain: layout style;
+  animation: win-open 0.18s cubic-bezier(0.1, 0.9, 0.2, 1) backwards;
+  transition: opacity 0.18s cubic-bezier(0.1, 0.9, 0.2, 1), transform 0.22s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+/* Mica: the active window picks up a soft tint from the wallpaper */
+.win:focus { outline: none; }
+.win-active { background: linear-gradient(var(--mica-tint), var(--mica-tint)), var(--mica); }
+.win-inactive { box-shadow: var(--shadow-window-inactive); }
+.win-full { border-radius: 0; border-color: transparent; }
+.win-dragging { transition: none !important; }
+
+.win-closing { animation: win-close 0.12s cubic-bezier(0.4, 0, 1, 1) both; pointer-events: none; }
+.win-minimized {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s cubic-bezier(0.4, 0, 1, 1) 0.03s, transform 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes win-open {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes win-close {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+/* ── Title bar ── */
+.win-titlebar {
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.win-full .win-titlebar { border-radius: 0; }
+.win-heading {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 14px;
+}
+.win-title {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.win-inactive .win-title, .win-inactive .win-caption-btn { color: var(--text-3); }
+
+/* Explorer-style tabs in the title bar */
+.win-titlebar-tabs { height: 40px; }
+.win-tabs {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding-left: 8px;
+}
+.win-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 240px;
+  min-width: 120px;
+  height: 32px;
+  padding: 0 6px 0 12px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--layer-solid);
+  box-shadow: 0 0 0 1px var(--stroke);
+  clip-path: inset(-1px -1px 0 -1px);
+}
+.win-tab .win-title { flex: 1; }
+.win-tab-close, .win-tab-add {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+}
+.win-tab-add { margin-bottom: 4px; width: 32px; height: 28px; }
+.win-tab-close:hover, .win-tab-add:hover { background: var(--subtle-hover); }
+
+/* Caption buttons */
+.win-captions { display: flex; align-self: flex-start; height: 32px; }
+.win-caption-btn {
+  width: 46px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+}
+.win-caption-btn:hover { background: var(--subtle-hover); }
+.win-caption-btn:active { background: var(--subtle-press); }
+.win-close { border-top-right-radius: var(--radius); }
+.win-full .win-close { border-radius: 0; }
+.win-close:hover { background: var(--close-red); color: #fff !important; }
+.win-close:active { background: color-mix(in srgb, var(--close-red) 85%, white); color: #fff; }
+
+/* ── Content ── */
+.win-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.win-full .win-body { border-radius: 0; }
+
+/* ── Resize handles ── */
+.win-edge { position: absolute; z-index: 2; }
+.win-edge-n { top: -4px; left: 8px; right: 8px; height: 8px; cursor: ns-resize; }
+.win-edge-s { bottom: -4px; left: 8px; right: 8px; height: 8px; cursor: ns-resize; }
+.win-edge-e { right: -4px; top: 8px; bottom: 8px; width: 8px; cursor: ew-resize; }
+.win-edge-w { left: -4px; top: 8px; bottom: 8px; width: 8px; cursor: ew-resize; }
+.win-edge-ne { top: -4px; right: -4px; width: 14px; height: 14px; cursor: nesw-resize; }
+.win-edge-sw { bottom: -4px; left: -4px; width: 14px; height: 14px; cursor: nesw-resize; }
+.win-edge-nw { top: -4px; left: -4px; width: 14px; height: 14px; cursor: nwse-resize; }
+.win-edge-se { bottom: -4px; right: -4px; width: 14px; height: 14px; cursor: nwse-resize; }
+.win-full .win-edge { display: none; }
+
+/* ── Snap preview ── */
+.snap-preview {
+  position: fixed;
+
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(30px) saturate(150%);
+  -webkit-backdrop-filter: blur(30px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  animation: snap-in 0.15s var(--ease);
+}
+@keyframes snap-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }

@@ -1,0 +1,31 @@
+.np { height: 100%; display: flex; flex-direction: column; background: var(--layer-solid); border-top: 1px solid var(--stroke); }
+.np-menubar { height: 40px; flex-shrink: 0; display: flex; align-items: center; gap: 2px; padding: 0 6px; }
+.np-menubar button { height: 30px; padding: 0 11px; border-radius: var(--radius-sm); font-size: 13px; }
+.np-menubar button:hover { background: var(--subtle-hover); }
+.np-text {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  background: var(--layer-solid);
+  color: var(--text);
+  font-family: "Cascadia Code", "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+  line-height: 1.5;
+  user-select: text;
+  border-top: 1px solid var(--divider);
+}
+.np-status {
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-2);
+  border-top: 1px solid var(--divider);
+  background: var(--mica);
+}
+.np-status span { padding: 0 14px; border-right: 1px solid var(--divider); white-space: nowrap; }
+.np-status span:last-child { border-right: none; }
+.np-status .np-flex { flex: 1; border-right: none; }

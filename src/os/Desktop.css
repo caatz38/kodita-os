@@ -1,0 +1,61 @@
+.desktop {
+  position: absolute;
+  inset: 0 0 var(--taskbar-h) 0;
+  padding: 4px 2px;
+}
+
+.desk-grid {
+  height: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(auto-fill, var(--cell-h));
+  grid-auto-columns: var(--cell-w);
+  gap: 2px;
+  align-content: start;
+  justify-content: start;
+  animation: desk-refresh 0.25s ease-out;
+}
+@keyframes desk-refresh { from { opacity: 0; } to { opacity: 1; } }
+
+.desk-medium { --cell-w: 78px; --cell-h: 84px; }
+.desk-small  { --cell-w: 74px; --cell-h: 66px; }
+.desk-large  { --cell-w: 104px; --cell-h: 118px; }
+
+.desk-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 2px 3px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  outline: none;
+  min-height: 0;
+  align-self: start;
+}
+.desk-icon:hover { background: rgba(255, 255, 255, 0.18); border-color: rgba(255, 255, 255, 0.22); }
+.desk-icon.selected { background: rgba(255, 255, 255, 0.3); border-color: rgba(255, 255, 255, 0.4); }
+.desk-icon:focus-visible { border-color: rgba(255, 255, 255, 0.7); }
+.desk-icon svg { filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25)); }
+
+.desk-label {
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.7);
+  max-width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+.desk-icon.selected .desk-label { -webkit-line-clamp: 5; }
+
+.desk-select {
+  position: fixed;
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 80%, white);
+  pointer-events: none;
+}

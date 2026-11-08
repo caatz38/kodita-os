@@ -1,0 +1,445 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   LIQUID GLASS (when <html data-material="liquid">)
+   Performance rules this file follows:
+   • no masks / pseudo-element overlays on glass (rims are gradient borders)
+   • live backdrop blur only on taskbar, Start, menus and panels;
+     windows use a pre-blurred wallpaper layer (src/os/liquid.js)
+   • every motion is transform/opacity driven by real springs (--spring-*)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root[data-material="liquid"] {
+  --taskbar-h: 68px;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-win: 22px;
+
+  /* glass tints */
+  --lg-clear: rgba(255, 255, 255, 0.1);
+  --lg-regular: rgba(255, 255, 255, 0.36);
+  --lg-thick: rgba(252, 253, 255, 0.58);
+  --lg-bubble: rgba(255, 255, 255, 0.42);
+  --lg-bubble-strong: rgba(255, 255, 255, 0.66);
+
+  /* light on glass */
+  --lg-rim-a: rgba(255, 255, 255, 0.95);
+  --lg-rim-b: rgba(255, 255, 255, 0.08);
+  --lg-rim-c: rgba(255, 255, 255, 0.55);
+  --lg-inner: inset 0 0 0 0.5px rgba(255, 255, 255, 0.35), inset 0 0 10px rgba(255, 255, 255, 0.28);
+  --lg-edge: 0 0 0 0.5px rgba(0, 10, 40, 0.1);
+  --lg-drop: 0 10px 30px rgba(10, 30, 80, 0.18), 0 2px 6px rgba(10, 30, 80, 0.1);
+  --lg-btn: inset 0 1px 0.5px rgba(255, 255, 255, 0.9), inset 0 -1px 0.5px rgba(255, 255, 255, 0.3), inset 0 0 0 0.5px rgba(255, 255, 255, 0.45), 0 2px 8px rgba(10, 30, 80, 0.1);
+
+  --acrylic: var(--lg-regular);
+  --acrylic-strong: var(--lg-thick);
+  --shadow-flyout: var(--lg-drop);
+  --shadow-menu: var(--lg-drop);
+  --shadow-window: 0 28px 70px rgba(10, 30, 80, 0.28), 0 6px 16px rgba(10, 30, 80, 0.12);
+  --shadow-window-inactive: 0 16px 44px rgba(10, 30, 80, 0.18), 0 3px 10px rgba(10, 30, 80, 0.08);
+  --mica-tint: transparent;
+}
+
+:root[data-material="liquid"][data-theme="dark"] {
+  --lg-clear: rgba(20, 22, 30, 0.18);
+  --lg-regular: rgba(26, 28, 36, 0.5);
+  --lg-thick: rgba(30, 32, 40, 0.7);
+  --lg-bubble: rgba(255, 255, 255, 0.12);
+  --lg-bubble-strong: rgba(255, 255, 255, 0.2);
+  --lg-rim-a: rgba(255, 255, 255, 0.5);
+  --lg-rim-b: rgba(255, 255, 255, 0.03);
+  --lg-rim-c: rgba(255, 255, 255, 0.22);
+  --lg-inner: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12), inset 0 0 10px rgba(255, 255, 255, 0.06);
+  --lg-edge: 0 0 0 0.5px rgba(0, 0, 0, 0.5);
+  --lg-drop: 0 10px 30px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --lg-btn: inset 0 1px 0.5px rgba(255, 255, 255, 0.25), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-material="liquid"].no-transparency {
+  --lg-clear: #eef1f6;
+  --lg-regular: #f2f4f8;
+  --lg-thick: #f6f7fa;
+}
+:root[data-material="liquid"][data-theme="dark"].no-transparency {
+  --lg-clear: #22242b;
+  --lg-regular: #24262d;
+  --lg-thick: #26282f;
+}
+
+/* ───────── The glass surface recipe ─────────
+   layer 1: computed specular rim (light catching the curved edge)
+   layer 2: tint
+   layer 3: bright gradient rim in the 1px border            */
+:root[data-material="liquid"] :is(.taskbar, .start, .ctx-menu, .flyout) {
+  border: 1px solid transparent;
+  background:
+    var(--lg-specular, linear-gradient(transparent, transparent)) 0 0 / 100% 100% no-repeat border-box,
+    linear-gradient(var(--glass-tint), var(--glass-tint)) padding-box,
+    linear-gradient(135deg, var(--lg-rim-a) 0%, var(--lg-rim-b) 30%, var(--lg-rim-b) 68%, var(--lg-rim-c) 100%) border-box;
+  box-shadow: var(--lg-inner), var(--lg-edge), var(--lg-drop);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  backdrop-filter: blur(14px) saturate(180%);
+}
+:root[data-material="liquid"] .taskbar { --glass-tint: var(--lg-clear); }
+:root[data-material="liquid"] .start, :root[data-material="liquid"] .flyout { --glass-tint: var(--lg-regular); }
+:root[data-material="liquid"] .ctx-menu { --glass-tint: var(--lg-thick); }
+
+/* While something moves (window drag, morphing menus/windows), glass skips the
+   expensive refraction and just frosts — it snaps back to bending when settled. */
+:root[data-material="liquid"]:is(.lg-busy, .os-dragging) .taskbar { backdrop-filter: blur(3px) saturate(200%) !important; }
+:root[data-material="liquid"]:is(.lg-busy, .os-dragging) :is(.start, .flyout, .ctx-menu) { backdrop-filter: blur(14px) saturate(180%) !important; }
+
+/* ───────── Springs: jelly press on every glass control ───────── */
+:root[data-material="liquid"] :is(
+  .tb-hover, .tb-search, .start-tile, .start-rec, .start-pill, .start-user, .start-power, .sr-item, .sr-open,
+  .qs-tile-btn, .qs-footer-btns button, .cal-month button, .fx-icon-btn, .fx-cmd-btn, .fx-pill, .fx-crumb,
+  .win-caption-btn, .win-tab-add, .win-tab-close, .slides-btn, .slides-present, .st-primary, .st-nav-item,
+  .pk-card, .mp-lib-card, .desk-icon, .np-menubar button, .ss-signin-btn, .qz-primary, .cl-run, .fx-item
+) {
+  transition:
+    transform var(--spring-bouncy-dur) var(--spring-bouncy),
+    background-color 0.18s, box-shadow 0.18s, opacity 0.18s;
+}
+:root[data-material="liquid"] :is(
+  .tb-hover, .tb-search, .start-tile, .start-rec, .start-pill, .start-user, .start-power, .sr-item, .sr-open,
+  .qs-tile-btn, .qs-footer-btns button, .cal-month button, .fx-icon-btn, .fx-cmd-btn, .fx-pill, .fx-crumb,
+  .win-caption-btn, .win-tab-add, .win-tab-close, .slides-btn, .slides-present, .st-primary, .st-nav-item,
+  .pk-card, .mp-lib-card, .desk-icon, .np-menubar button, .ss-signin-btn, .qz-primary, .cl-run, .fx-item
+):active:not(:disabled) {
+  transform: scale(0.92);
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), background-color 0.18s, box-shadow 0.18s;
+}
+
+/* glass "bubble" hover for pills */
+:root[data-material="liquid"] :is(
+  .tb-hover:hover, .tb-tray .pressed, .start-tile:hover, .start-rec:hover, .start-all-item:hover, .sr-item:hover,
+  .sr-item.active, .start-user:hover, .start-power:hover, .qs-footer-btns button:hover, .cal-month button:hover
+) {
+  background: var(--lg-bubble);
+  box-shadow: var(--lg-btn);
+}
+
+/* ───────── Taskbar: floating capsule + liquid droplet ───────── */
+:root[data-material="liquid"] .taskbar {
+  left: 10px;
+  right: 10px;
+  bottom: 8px;
+  height: 52px;
+  border-radius: 26px;
+  padding: 0 4px;
+}
+:root[data-material="liquid"] .tb-peek { display: none; }
+:root[data-material="liquid"] .tb-center > :is(button, .tb-search) { position: relative; z-index: 1; }
+:root[data-material="liquid"] .tb-btn { width: 42px; height: 42px; border-radius: 14px; transition: none; }
+:root[data-material="liquid"] .tb-btn:hover { background: none; box-shadow: none; }
+:root[data-material="liquid"] .tb-btn > :is(svg, img) {
+  transition: transform var(--spring-bouncy-dur) var(--spring-bouncy);
+}
+:root[data-material="liquid"] .tb-btn:hover > :is(svg, img) { transform: scale(1.16) translateY(-1px); }
+:root[data-material="liquid"] .tb-btn:active > :is(svg, img) { transform: scale(0.86); transition-duration: 0.1s; transition-timing-function: ease-out; }
+:root[data-material="liquid"] .tb-active, :root[data-material="liquid"] .tb-start.pressed { background: rgba(255, 255, 255, 0.22); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.35); }
+:root[data-material="liquid"] .tb-dot {
+  bottom: 1px;
+  height: 4px;
+  border-radius: 2px;
+  transition: width var(--spring-bouncy-dur) var(--spring-bouncy), margin var(--spring-bouncy-dur) var(--spring-bouncy), background 0.2s;
+}
+:root[data-material="liquid"] .tb-lens {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 42px;
+  height: 42px;
+  margin-top: -21px;
+  border-radius: 15px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+  background: radial-gradient(130% 110% at 30% 15%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0.14));
+  box-shadow:
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.7),
+    inset 0 0 10px rgba(255, 255, 255, 0.35),
+    0 6px 16px rgba(10, 30, 80, 0.2),
+    0 0 0 0.5px rgba(0, 10, 40, 0.08);
+}
+:root[data-material="liquid"][data-theme="dark"] .tb-lens {
+  background: radial-gradient(130% 110% at 30% 15%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08) 55%, rgba(255, 255, 255, 0.05));
+}
+:root[data-material="liquid"] .tb-search {
+  height: 38px;
+  border-radius: 19px;
+  border: none;
+  background: var(--lg-bubble);
+  box-shadow: var(--lg-btn);
+  color: var(--text);
+}
+:root[data-material="liquid"] .tb-search:hover { background: var(--lg-bubble-strong); }
+:root[data-material="liquid"] .tb-widgets { height: 42px; border-radius: 21px; margin-left: 2px; }
+:root[data-material="liquid"] .tb-tray button { height: 42px; }
+:root[data-material="liquid"] .tb-status, :root[data-material="liquid"] .tb-clock { border-radius: 21px; }
+:root[data-material="liquid"] .tb-chevron, :root[data-material="liquid"] .tb-bell { border-radius: 50%; }
+:root[data-material="liquid"] .tb-bell { width: 38px; margin-right: 4px; }
+
+/* ───────── Start menu (morphs out of the Start button — see StartMenu.jsx) ───────── */
+:root[data-material="liquid"] .start { border-radius: 30px; will-change: transform, opacity; }
+:root[data-material="liquid"] .start-in { animation: none; visibility: visible; }
+:root[data-material="liquid"] .start-out { animation: none; visibility: hidden; transition: visibility 0s linear 0.2s; pointer-events: none; }
+/* Sections (not each tile) bounce in, slightly staggered — few layers = smooth. */
+:root[data-material="liquid"] .start-in :is(.start-search, .start-section, .start-footer, .start-all, .start-results) {
+  animation: lg-item-in var(--spring-pop-dur) var(--spring-pop) both;
+  animation-delay: 60ms;
+}
+:root[data-material="liquid"] .start-in .start-section + .start-section { animation-delay: 120ms; }
+:root[data-material="liquid"] .start-in .start-footer { animation-delay: 160ms; }
+@keyframes lg-item-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+:root[data-material="liquid"] .start-search {
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  background: var(--lg-bubble-strong);
+  box-shadow: var(--lg-btn);
+}
+:root[data-material="liquid"] .start-search:focus-within { border: none; box-shadow: var(--lg-btn), 0 0 0 2px var(--accent); }
+:root[data-material="liquid"] .start-tile { border-radius: 18px; }
+:root[data-material="liquid"] .start-tile:hover { transform: translateY(-2px) scale(1.04); }
+:root[data-material="liquid"] :is(.start-rec, .start-all-item, .sr-item) { border-radius: 14px; }
+:root[data-material="liquid"] .start-pill { height: 26px; padding: 0 12px; border-radius: 13px; border: none; background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] .start-pill:hover { background: var(--lg-bubble-strong); transform: scale(1.05); }
+:root[data-material="liquid"] .start-footer { background: transparent; border-top: 1px solid rgba(255, 255, 255, 0.3); }
+:root[data-material="liquid"] :is(.start-user, .start-power) { border-radius: 20px; }
+:root[data-material="liquid"] .sr-detail { border-radius: 22px; border: none; background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+
+/* ───────── Context menus (pop out of the click point) ───────── */
+:root[data-material="liquid"] .ctx-menu { border-radius: 16px; padding: 5px; opacity: 1; }
+:root[data-material="liquid"] .ctx-menu.ctx-ready { animation: none; }
+:root[data-material="liquid"] .ctx-item { height: 30px; border-radius: 10px; transition: background-color 0.12s, transform var(--spring-snappy-dur) var(--spring-snappy); }
+:root[data-material="liquid"] .ctx-item:hover:not(.ctx-disabled), :root[data-material="liquid"] .ctx-item.ctx-active { background: var(--accent); color: var(--accent-text); }
+:root[data-material="liquid"] .ctx-item:active:not(.ctx-disabled) { transform: scale(0.97); }
+:root[data-material="liquid"] .ctx-item:hover:not(.ctx-disabled) :is(.ctx-icon, .ctx-shortcut, .ctx-chevron),
+:root[data-material="liquid"] .ctx-item.ctx-active :is(.ctx-icon, .ctx-shortcut, .ctx-chevron) { color: inherit; }
+:root[data-material="liquid"] .ctx-divider { margin: 4px 10px; background: rgba(127, 127, 127, 0.22); }
+
+/* ───────── Flyouts (grow out of their tray button) ───────── */
+:root[data-material="liquid"] .flyout { border-radius: 28px; animation: none; }
+:root[data-material="liquid"] .flyout-stack .flyout { position: relative; }
+:root[data-material="liquid"] :is(.qs-grid, .qs-slider) { animation: lg-item-in var(--spring-pop-dur) var(--spring-pop) both; animation-delay: 70ms; }
+:root[data-material="liquid"] .qs-slider { animation-delay: 120ms; }
+:root[data-material="liquid"] .qs-tile-btn { height: 52px; border-radius: 26px; border: none; background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] .qs-tile-btn:hover { background: var(--lg-bubble-strong); }
+:root[data-material="liquid"] .qs-tile-btn.on { background: var(--accent); box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.5), 0 4px 14px color-mix(in srgb, var(--accent) 45%, transparent); }
+:root[data-material="liquid"] .qs-tile-chev { border-left-color: rgba(255, 255, 255, 0.3); }
+:root[data-material="liquid"] .qs-footer { background: transparent; border-top: 1px solid rgba(255, 255, 255, 0.3); }
+:root[data-material="liquid"] .cal-head { border-bottom-color: rgba(255, 255, 255, 0.3); }
+:root[data-material="liquid"] .cal-day { transition: transform var(--spring-bouncy-dur) var(--spring-bouncy); }
+:root[data-material="liquid"] .cal-day:hover { transform: scale(1.12); }
+
+/* ───────── Sliders: the knob turns into a glass lens while you drag ───────── */
+:root[data-material="liquid"] :is(.qs-slider, .st) input[type='range'] { height: 6px; border-radius: 3px; }
+:root[data-material="liquid"] :is(.qs-slider, .st) input[type='range']::-webkit-slider-thumb {
+  width: 30px;
+  height: 20px;
+  border-radius: 10px;
+  border: none;
+  background: #fff;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(10, 30, 80, 0.25);
+  transition: transform var(--spring-bouncy-dur) var(--spring-bouncy), background-color 0.2s, box-shadow 0.2s;
+}
+:root[data-material="liquid"] :is(.qs-slider, .st) input[type='range']:active::-webkit-slider-thumb {
+  transform: scale(1.6, 1.5);
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.95), inset 0 0 0 0.75px rgba(255, 255, 255, 0.8), inset 0 0 6px rgba(255, 255, 255, 0.5), 0 4px 14px rgba(10, 30, 80, 0.22);
+}
+
+/* ───────── Switches (iOS 26): the thumb stretches & turns to glass while held ───────── */
+:root[data-material="liquid"] .st-toggle-track {
+  width: 52px;
+  height: 30px;
+  border-radius: 15px;
+  border: none;
+  background: rgba(120, 120, 128, 0.28);
+  transition: background-color 0.25s;
+}
+:root[data-material="liquid"] .st-toggle.on .st-toggle-track { background: #34c759; }
+:root[data-material="liquid"] .st-toggle-thumb {
+  left: 2px;
+  top: 2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04), 0 3px 8px rgba(0, 0, 0, 0.2);
+  transition: transform var(--spring-bouncy-dur) var(--spring-bouncy), width var(--spring-snappy-dur) var(--spring-snappy), background-color 0.2s, box-shadow 0.2s;
+}
+:root[data-material="liquid"] .st-toggle:hover .st-toggle-thumb { width: 26px; }
+:root[data-material="liquid"] .st-toggle.on .st-toggle-thumb, :root[data-material="liquid"] .st-toggle.on:hover .st-toggle-thumb { transform: translateX(22px); background: #fff; }
+:root[data-material="liquid"] .st-toggle:active .st-toggle-thumb {
+  width: 36px;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0.5px #fff, inset 0 0 0 0.75px rgba(255, 255, 255, 0.85), 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.12);
+}
+:root[data-material="liquid"] .st-toggle.on:active .st-toggle-thumb { transform: translateX(12px) scale(1.12); }
+
+/* ───────── Windows ───────── */
+:root[data-material="liquid"] .win {
+  --win-tint: var(--lg-thick);
+  border: 1px solid transparent;
+  border-radius: var(--radius-win);
+  /* tint → pre-blurred wallpaper (painted, not a live blur) → bright rim in the border */
+  background:
+    linear-gradient(var(--win-tint), var(--win-tint)) padding-box,
+    var(--wall-glass, linear-gradient(var(--mica), var(--mica))) var(--wg-pos, 0 0) / 100vw 100vh no-repeat padding-box,
+    linear-gradient(135deg, var(--lg-rim-a) 0%, var(--lg-rim-b) 28%, var(--lg-rim-b) 70%, var(--lg-rim-c) 100%) border-box;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.4), var(--lg-edge), var(--shadow-window);
+  animation: none;
+  transition: opacity 0.18s;
+}
+:root[data-material="liquid"] .win-inactive { --win-tint: var(--lg-regular); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.3), var(--lg-edge), var(--shadow-window-inactive); }
+:root[data-material="liquid"] .win-active { --win-tint: var(--lg-thick); }
+:root[data-material="liquid"] :is(.win-titlebar, .win-body) { position: relative; z-index: 1; }
+:root[data-material="liquid"] .win-full { border-radius: 0; border-color: transparent; }
+:root[data-material="liquid"] .win-closing { animation: lg-win-close 0.18s cubic-bezier(0.5, 0, 0.75, 0) both; }
+@keyframes lg-win-close { to { opacity: 0; transform: scale(0.88); } }
+:root[data-material="liquid"] .win-minimized { transition: none; }
+:root[data-material="liquid"] .win-titlebar { border-radius: var(--radius-win) var(--radius-win) 0 0; }
+:root[data-material="liquid"] .win-body { border-radius: 0 0 calc(var(--radius-win) - 1px) calc(var(--radius-win) - 1px); }
+:root[data-material="liquid"] .win-full :is(.win-titlebar, .win-body) { border-radius: 0; }
+:root[data-material="liquid"] .win-heading { padding-left: 18px; }
+:root[data-material="liquid"] .win-title { font-weight: 600; }
+:root[data-material="liquid"] .win-captions { gap: 4px; padding: 4px 8px 0 0; height: auto; }
+:root[data-material="liquid"] .win-caption-btn { width: 34px; height: 26px; border-radius: 13px; }
+:root[data-material="liquid"] .win-caption-btn:hover { background: var(--lg-bubble-strong); box-shadow: var(--lg-btn); transform: scale(1.06); }
+:root[data-material="liquid"] .win-close:hover { background: #ff3b30; box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.45), 0 2px 8px rgba(255, 59, 48, 0.45); }
+:root[data-material="liquid"] .win-full .win-close { border-radius: 13px; }
+:root[data-material="liquid"] .win-titlebar-tabs { height: 44px; }
+:root[data-material="liquid"] .win-tabs { align-items: center; padding-left: 10px; }
+:root[data-material="liquid"] .win-tab { height: 32px; border-radius: 16px; clip-path: none; background: var(--lg-bubble-strong); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] :is(.win-tab-close, .win-tab-add) { border-radius: 50%; }
+:root[data-material="liquid"] .win-tab-add { margin-bottom: 0; width: 30px; height: 30px; }
+:root[data-material="liquid"] .snap-preview {
+  border-radius: var(--radius-win);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: var(--lg-inner), var(--lg-drop);
+  animation: lg-snap 0.4s var(--spring-pop) both;
+}
+@keyframes lg-snap { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
+
+/* ───────── Apps: glass chrome, solid content ───────── */
+:root[data-material="liquid"] .fx { background: transparent; border-top: none; }
+:root[data-material="liquid"] .fx-cmd { border-bottom: none; }
+:root[data-material="liquid"] :is(.fx-crumbs, .fx-search) { height: 34px; border-radius: 17px; border: none; background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] .fx-search:focus-within { border: none; box-shadow: var(--lg-btn), 0 0 0 2px var(--accent); }
+:root[data-material="liquid"] :is(.fx-icon-btn, .fx-cmd-btn) { border-radius: 16px; }
+:root[data-material="liquid"] :is(.fx-icon-btn:hover:not(:disabled), .fx-cmd-btn:hover:not(:disabled), .fx-details-btn.on) { background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] .fx-crumb { border-radius: 12px; }
+:root[data-material="liquid"] .fx-nav { border-right: none; padding-left: 8px; }
+:root[data-material="liquid"] .fx-nav-item { border-radius: 10px; transition: background-color 0.15s, transform var(--spring-bouncy-dur) var(--spring-bouncy); }
+:root[data-material="liquid"] .fx-nav-item:hover { background: var(--lg-bubble); }
+:root[data-material="liquid"] .fx-nav-item:active { transform: scale(0.95); transition-duration: 0.1s; }
+:root[data-material="liquid"] .fx-nav-item.active { background: var(--lg-bubble-strong); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] .fx-nav-sep { background: rgba(127, 127, 127, 0.2); }
+:root[data-material="liquid"] .fx-content { background: var(--layer-solid); border-radius: 16px; margin-right: 8px; box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.06), 0 2px 10px rgba(10, 30, 80, 0.06); }
+:root[data-material="liquid"] .fx-content-inner { animation: lg-content-in var(--spring-smooth-dur) var(--spring-smooth); }
+@keyframes lg-content-in { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+:root[data-material="liquid"] .fx-details { border-left: none; }
+:root[data-material="liquid"] .fx-item { border-radius: 12px; }
+:root[data-material="liquid"] .fx-tile:hover { transform: translateY(-2px); }
+:root[data-material="liquid"] .fx-pill { border: none; background: var(--subtle-hover); }
+:root[data-material="liquid"] .fx-pill.on { background: var(--accent); box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 40%, transparent); }
+
+:root[data-material="liquid"] .slides-app { background: transparent; border-top: none; }
+:root[data-material="liquid"] .slides-toolbar { background: transparent; border-bottom: none; }
+:root[data-material="liquid"] .slides-thumbs { background: transparent; border-right: none; }
+:root[data-material="liquid"] .slides-frame { border-radius: 14px; box-shadow: 0 12px 36px rgba(10, 30, 80, 0.22), 0 0 0 0.5px rgba(0, 0, 0, 0.08); }
+:root[data-material="liquid"] .slides-btn { border-radius: 16px; }
+:root[data-material="liquid"] :is(.slides-btn:hover:not(:disabled), .slides-btn.on) { background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] .slides-present { border-radius: 17px; box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.45), 0 4px 14px color-mix(in srgb, var(--accent) 40%, transparent); }
+:root[data-material="liquid"] .slides-slide.from-right { animation: lg-slide-r var(--spring-smooth-dur) var(--spring-smooth); }
+:root[data-material="liquid"] .slides-slide.from-left { animation: lg-slide-l var(--spring-smooth-dur) var(--spring-smooth); }
+@keyframes lg-slide-r { from { opacity: 0; transform: translateX(8%) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes lg-slide-l { from { opacity: 0; transform: translateX(-8%) scale(0.96); } to { opacity: 1; transform: none; } }
+:root[data-material="liquid"] .sl-thumb-frame { border-radius: 8px; }
+
+:root[data-material="liquid"] :is(.st-row, .st-card, .st-sub) { border: none; background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] :is(.st-row, .st-card) { border-radius: 18px; }
+:root[data-material="liquid"] .st-sub { border-radius: 0 0 18px 18px; }
+:root[data-material="liquid"] .st-row.st-row-joined { border-radius: 18px 18px 0 0; }
+:root[data-material="liquid"] .st-nav-item { border-radius: 12px; }
+:root[data-material="liquid"] .st-nav-item.active { background: var(--lg-bubble-strong); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] .st-nav-item.active::before { transition: transform var(--spring-bouncy-dur) var(--spring-bouncy); }
+:root[data-material="liquid"] .st-search { border-radius: 17px; border: none; background: var(--lg-bubble); box-shadow: var(--lg-btn); }
+:root[data-material="liquid"] :is(.st-preview, .st-theme, .st-wall) { border-radius: 16px; }
+:root[data-material="liquid"] :is(.st-theme, .st-wall, .st-accent) { transition: transform var(--spring-bouncy-dur) var(--spring-bouncy), box-shadow 0.2s; }
+:root[data-material="liquid"] :is(.st-theme, .st-wall):hover { transform: translateY(-3px) scale(1.03); }
+:root[data-material="liquid"] .st-accent { border-radius: 50%; }
+:root[data-material="liquid"] .st-accent:hover { transform: scale(1.15); }
+:root[data-material="liquid"] .st-accent:active { transform: scale(0.88); transition-duration: 0.1s; }
+:root[data-material="liquid"] :is(.st-select, .st-primary) { border-radius: 16px; }
+:root[data-material="liquid"] .st-page { animation: lg-content-in var(--spring-smooth-dur) var(--spring-smooth); }
+
+:root[data-material="liquid"] .np { background: transparent; border-top: none; }
+:root[data-material="liquid"] .np-menubar button { border-radius: 14px; }
+:root[data-material="liquid"] .np-menubar button:hover { background: var(--lg-bubble); }
+:root[data-material="liquid"] .np-text { margin: 0 8px; border-radius: 14px 14px 0 0; border-top: none; box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.06); }
+:root[data-material="liquid"] .np-status { background: transparent; border-top: none; }
+:root[data-material="liquid"] :is(.pk, .mp-light, .app-placeholder) { background: transparent; border-top: none; }
+:root[data-material="liquid"] .pk-thumb { border-radius: 12px; }
+:root[data-material="liquid"] :is(.pk-card, .mp-lib-card) { border-radius: 18px; }
+:root[data-material="liquid"] .pk-card:hover { background: var(--lg-bubble); box-shadow: var(--lg-btn); transform: translateY(-3px); }
+:root[data-material="liquid"] :is(.cl, .qz, .mp-dark) { border-top: none; }
+:root[data-material="liquid"] .qz-opt { transition: transform var(--spring-bouncy-dur) var(--spring-bouncy), opacity 0.25s, filter 0.25s, box-shadow 0.2s; }
+:root[data-material="liquid"] .mp-controls {
+  border-radius: 24px;
+  border: none;
+  background: rgba(40, 40, 48, 0.35);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.35), inset 0 0 0 0.5px rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ───────── Desktop ───────── */
+:root[data-material="liquid"] .desk-icon { border-radius: 16px; }
+:root[data-material="liquid"] .desk-icon:hover { background: rgba(255, 255, 255, 0.2); border-color: transparent; box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.55), inset 0 0 0 0.5px rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
+:root[data-material="liquid"] .desk-icon.selected { background: rgba(255, 255, 255, 0.32); border-color: transparent; box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.75), inset 0 0 0 0.5px rgba(255, 255, 255, 0.45), 0 4px 14px rgba(10, 30, 80, 0.15); }
+:root[data-material="liquid"] .desk-select { border-radius: 10px; background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.65); box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3); }
+
+/* ───────── Lock / sign-in ───────── */
+:root[data-material="liquid"] .ss-lock { transition: transform 0.8s var(--spring-smooth); }
+:root[data-material="liquid"] .ss-time {
+  color: transparent;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.72) 55%, rgba(255, 255, 255, 0.5) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 1px rgba(255, 255, 255, 0.35)) drop-shadow(0 6px 22px rgba(0, 20, 80, 0.3));
+  font-weight: 700;
+  animation: lg-time-in 0.9s var(--spring-pop) both;
+}
+@keyframes lg-time-in { from { opacity: 0; transform: translateY(-24px) scale(0.92); } to { opacity: 1; transform: none; } }
+:root[data-material="liquid"] .ss-signin { transition: opacity 0.35s 0.1s, transform var(--spring-pop-dur) var(--spring-pop) 0.1s; transform: scale(0.88); }
+:root[data-material="liquid"] .ss-signin.show { transform: none; }
+:root[data-material="liquid"] .ss-signin-btn {
+  height: 44px;
+  padding: 0 26px;
+  border-radius: 22px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.8), inset 0 -1px 0.5px rgba(255, 255, 255, 0.25), inset 0 0 0 0.5px rgba(255, 255, 255, 0.45), 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+:root[data-material="liquid"] .ss-signin-btn:hover { transform: scale(1.05); background: rgba(255, 255, 255, 0.28); }
+:root[data-material="liquid"] .ss-avatar {
+  background: rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.75), inset 0 0 0 1px rgba(255, 255, 255, 0.4), inset 0 -20px 40px -20px rgba(255, 255, 255, 0.45), 0 16px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* Respect "reduce motion" */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-material="liquid"] * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
