@@ -16,7 +16,7 @@ import { useClock, fmtTime, fmtDate } from './useClock.js';
 import { config } from '../content/config.js';
 import './Taskbar.css';
 
-export const PINNED = ['explorer', 'slides', 'code', 'media', 'quiz', 'notepad', 'settings'];
+export const PINNED = ['explorer', 'slides', 'code', 'media', 'notepad', 'settings'];
 
 function TaskButton({ app }) {
   const { windows, focused, openApp, focusWindow, minimizeWindow, closeWindow, openMenu } = useOS();

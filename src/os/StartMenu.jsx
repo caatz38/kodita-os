@@ -13,7 +13,7 @@ import { tree, allFiles } from '../content/tree.js';
 import { config } from '../content/config.js';
 import './StartMenu.css';
 
-const PINNED_APPS = ['explorer', 'slides', 'code', 'media', 'photos', 'quiz', 'notepad', 'settings'];
+const PINNED_APPS = ['explorer', 'slides', 'code', 'media', 'photos', 'notepad', 'settings'];
 const RECENT_LABELS = ['Recently added', '2h ago', 'Yesterday at 4:20 PM', '17h ago', 'Monday at 9:12 AM', 'Last week'];
 
 function describe(item) {

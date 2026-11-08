@@ -8,6 +8,23 @@ import {
 } from '@fluentui/react-icons';
 import './CodeLab.css';
 
+// Injected before the student's code: forwards console.log / errors to the Console panel.
+const CONSOLE_SHIM = `<script>(function () {
+  var send = function (level, args) {
+    try {
+      parent.postMessage({ __koditaConsole: true, level: level, text: Array.prototype.map.call(args, function (a) {
+        if (typeof a === 'string') return a;
+        try { return JSON.stringify(a); } catch (e) { return String(a); }
+      }).join(' ') }, '*');
+    } catch (e) {}
+  };
+  ['log', 'info', 'warn', 'error'].forEach(function (level) {
+    var orig = console[level];
+    console[level] = function () { send(level, arguments); orig && orig.apply(console, arguments); };
+  });
+  window.addEventListener('error', function (e) { send('error', [e.message + (e.lineno ? ' (baris ' + e.lineno + ')' : '')]); });
+})();<\/script>`;
+
 const DEFAULT_CODE = `<h1>Halo!</h1>
 <p>Tulis kode HTML di sini.</p>
 `;
@@ -40,6 +57,24 @@ function CodeLab({ item }) {
   const [reloadKey, setReloadKey] = useState(0);
   const mainRef = useRef(null);
   const previewRef = useRef(null);
+  const frameRef = useRef(null);
+  const [logs, setLogs] = useState([]);
+  const [consoleOpen, setConsoleOpen] = useState(true);
+  const consoleEndRef = useRef(null);
+
+  // Collect console.log output from the preview.
+  useEffect(() => {
+    const onMessage = (e) => {
+      if (!e.data?.__koditaConsole || e.source !== frameRef.current?.contentWindow) return;
+      setLogs((l) => [...l.slice(-199), { level: e.data.level, text: e.data.text, id: Math.random() }]);
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
+  // Fresh console for every new version of the page.
+  useEffect(() => setLogs([]), [preview, reloadKey]);
+  useEffect(() => consoleEndRef.current?.scrollIntoView({ block: 'nearest' }), [logs]);
+  const usesConsole = /console\.|<script/i.test(preview);
 
   // Live preview (slightly delayed so typing stays smooth).
   useEffect(() => {
@@ -144,11 +179,35 @@ function CodeLab({ item }) {
           </div>
           <iframe
             key={reloadKey}
+            ref={frameRef}
             title="Preview"
             className="cl-frame"
             sandbox="allow-scripts allow-modals allow-forms"
-            srcDoc={preview}
+            srcDoc={CONSOLE_SHIM + preview}
           />
+          {usesConsole && (
+            <div className={`cl-console ${consoleOpen ? 'open' : ''}`}>
+              <div className="cl-console-head">
+                <button className="cl-console-toggle" onClick={() => setConsoleOpen((o) => !o)}>
+                  {consoleOpen ? <ChevronDown12Regular /> : <ChevronRight12Regular />} Console
+                  {logs.length > 0 && <span className="cl-console-count">{logs.length}</span>}
+                </button>
+                <button className="cl-console-clear" onClick={() => setLogs([])}>Clear</button>
+              </div>
+              {consoleOpen && (
+                <div className="cl-console-body">
+                  {logs.length === 0 && <div className="cl-console-empty">console.log() kamu muncul di sini</div>}
+                  {logs.map((l) => (
+                    <div key={l.id} className={`cl-log cl-log-${l.level}`}>
+                      <span className="cl-log-caret">›</span>
+                      {l.text}
+                    </div>
+                  ))}
+                  <div ref={consoleEndRef} />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

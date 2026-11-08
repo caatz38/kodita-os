@@ -58,186 +58,211 @@ export const desktop = [
           'Roblox Studio — Lesson Completed!',
         ]),
       },
-      {
-        type: 'quiz',
-        name: 'Kuis Roblox Step Coding',
-        description: 'Kuis dari materi Roblox Step Coding.',
-        questions: [
-          { q: 'Roblox Studio itu apa?', options: ['Game buat dimainkan', 'Game engine buat bikin game Roblox', 'Aplikasi chat', 'Browser internet'], answer: 1 },
-          { q: 'Ada berapa panel utama (main panels) di Roblox Studio?', options: ['2', '3', '4', '5'], answer: 1 },
-          { q: 'Panel yang BUKAN termasuk 3 main panels adalah…', options: ['Viewport', 'Explorer', 'Properties', 'Toolbox'], answer: 3 },
-          { q: 'Tombol untuk maju, mundur, kanan, kiri adalah…', options: ['Panah atas/bawah', 'W, A, S, D', 'E dan Q', 'Spasi'], answer: 1 },
-          { q: 'Tombol untuk naik dan turun adalah…', options: ['E dan Q', 'W dan S', 'Shift dan Ctrl', 'Z dan X'], answer: 0 },
-          { q: 'Shortcut untuk Duplicate adalah…', options: ['⌘/Ctrl + C', '⌘/Ctrl + V', '⌘/Ctrl + D', '⌘/Ctrl + Z'], answer: 2 },
-          { q: 'Roblox memakai bahasa pemrograman…', options: ['Python', 'Java', 'Lua', 'HTML'], answer: 2 },
-          {
-            q: 'Today’s problem: player dengan 101 health menyentuh lava (script: humanoid.Health = 0). Dia hidup atau tidak?',
-            options: ['Hidup, health-nya sisa 1', 'Tidak — health langsung jadi 0', 'Hidup, karena health lebih dari 100', 'Lava tidak berpengaruh'],
-            answer: 1,
-          },
-        ],
-      },
     ],
   },
 
   // ───────────────────────────── WEB DEV ─────────────────────────────
+  // Slides come from the Canva deck "</kodita> | WD | Lesson 1"
+  // (exported as images into public/media/web-dev-lesson-1/).
+  // The latihan follow the deck: HTML #thebones → CSS #theskin → JS #thebrain → Challenge.
   {
     type: 'folder',
     name: 'Web Dev',
-    description: 'Belajar membuat website sendiri dengan HTML & CSS.',
+    description: 'Web Development Lesson 1 — Web Dev Introduction, HTML CSS JS Basic.',
     children: [
       {
         type: 'slides',
-        name: '01 - Apa itu Website',
-        description: 'Bagaimana website bekerja.',
-        slides: [
-          { layout: 'title', title: 'Apa itu Website?', subtitle: 'Dan bagaimana cara membuatnya' },
-          {
-            layout: 'bullets',
-            title: 'Website ada di mana-mana',
-            points: ['YouTube, Instagram, Google — semuanya website', 'Website = kumpulan halaman yang dibuka lewat browser', 'Setiap website dibuat dengan KODE'],
-          },
-          {
-            layout: 'bullets',
-            title: '3 bahasa utama website',
-            points: ['🦴 HTML — kerangka / isi halaman', '🎨 CSS — tampilan: warna, ukuran, posisi', '⚡ JavaScript — interaksi & logika'],
-          },
-          { layout: 'section', title: 'Hari ini: HTML & CSS', subtitle: 'Di akhir sesi kamu punya halaman profil sendiri!' },
-        ],
-      },
-      {
-        type: 'slides',
-        name: '02 - Mengenal HTML',
-        description: 'Tag-tag dasar HTML.',
-        slides: [
-          { layout: 'title', title: 'Mengenal HTML', subtitle: 'HyperText Markup Language' },
-          {
-            layout: 'code',
-            title: 'Tag = pembungkus isi',
-            code: '<h1>Ini judul besar</h1>\n<p>Ini paragraf biasa.</p>',
-            points: ['Tag pembuka <h1> dan penutup </h1>', 'h1 = heading (judul)', 'p = paragraph (paragraf)'],
-          },
-          {
-            layout: 'code',
-            title: 'Tag yang sering dipakai',
-            code: '<h1>Judul</h1>\n<p>Paragraf</p>\n<img src="foto.png">\n<a href="https://...">Link</a>\n<button>Klik aku</button>',
-            points: ['img = gambar', 'a = link ke halaman lain', 'button = tombol'],
-          },
-          { layout: 'section', title: 'Saatnya praktik!', subtitle: 'Buka file “latihan-1-halo-dunia”' },
-        ],
-      },
-      {
-        type: 'slides',
-        name: '03 - Mempercantik dengan CSS',
-        description: 'Memberi warna dan gaya pada halaman.',
-        slides: [
-          { layout: 'title', title: 'Mempercantik dengan CSS', subtitle: 'Cascading Style Sheets' },
-          {
-            layout: 'code',
-            title: 'Cara menulis CSS',
-            code: 'h1 {\n  color: purple;\n  font-size: 48px;\n}',
-            points: ['h1 = elemen yang mau diubah', 'color = warna tulisan', 'font-size = ukuran tulisan'],
-          },
-          {
-            layout: 'code',
-            title: 'Properti favorit',
-            code: 'body {\n  background: #fdf2ff;\n  text-align: center;\n}\nbutton {\n  padding: 12px 24px;\n  border-radius: 12px;\n}',
-            points: ['background = warna latar', 'text-align = posisi teks', 'border-radius = sudut melengkung'],
-          },
-        ],
+        name: 'Web Dev Lesson 1',
+        description: 'What is website development, VSCode, HTML/CSS/JS basic, challenge, GitHub.',
+        slides: canvaPages('web-dev-lesson-1', [
+          'Web Development Lesson 1 — Web Dev Introduction: HTML CSS JS Basic',
+          'What you’ll learn today: What is Website Development, VSCode, HTML basic, CSS basic, JS basic, Challenge, GitHub',
+          'What is WebDev? HTML? CSS? JavaScript? GitHub? Inspect? VSCode?',
+          'Let’s start with inspecting elements in wikipedia.org — wait, how to enable developer mode?',
+          'Chrome: View → Developer → Developer Tools / Inspect Elements',
+          'Safari: Develop → Show Page Source / Inspect Element',
+          'Inspecting Wikipedia with developer tools',
+          'So the conclusion is: every website you visited is actually just a mix of HTML + CSS + JS',
+          'What is HTML? CSS? JS? HTML = the skeleton of a webpage (#thebones). CSS = the design that makes HTML look good (#theskin). JS = the brain that makes pages do things, like reacting to clicks (#thebrain).',
+          'HTML #thebones: <html> wraps the whole page, <h1> big heading, <p> paragraph, <img> picture input, <a> clickable link, <button> clickable button',
+          'CSS #theskin: color = text color, background = fill color, font-size = size of font, margin/padding = spacing stuff',
+          'JS #thebrain: variable = labeled box for data, function = reusable block of actions, if else = decision, event listener = react when there’s an event, console.log() = print a message to check things',
+          'The bigboss: FRONTEND = what you see (layout, colors, buttons). BACKEND = what happens behind the scenes (servers, databases) — we’ll save this for later. Together: WEBSITE.',
+          'git init / git branch -M main / git remote add origin <PASTE_YOUR_REMOTE_REPOSITORY_URL> / git add . / git commit -m "..." / git push -u origin main',
+          'Btw, where can we code??',
+          'Well.. hi I’m VSCode: a free source code editor to write, edit, test and debug code. Hi I’m GitHub: a cloud-based platform to store, share and collaborate on projects — and I can help you publish your website!',
+          'What to do next: VSCode — code.visualstudio.com, next next next, create a file named index.html. GitHub — github.com, create repo.',
+          'Web Development Lesson 1 — Lesson Completed!',
+          'Challenge',
+        ]),
       },
       {
         type: 'code',
-        name: 'latihan-1-halo-dunia',
-        description: 'Latihan pertama: halaman HTML sederhana.',
-        task: 'Ganti tulisan "Halo dunia!" dengan namamu, lalu tambahkan satu paragraf tentang hobimu.',
-        starter: `<h1>Halo dunia!</h1>
-<p>Ini website pertamaku.</p>
+        name: 'latihan-1-html-thebones',
+        description: 'HTML #thebones: <h1>, <p>, <img>, <a>, <button>.',
+        task: 'HTML = #thebones. Ganti isi <h1> dan <p> jadi tentang kamu, lalu tambahin minimal 1 tag lagi dari materi (<p>, <a>, <img>, atau <button>).',
+        starter: `<html>
+  <body>
+    <!-- <h1> = big heading -->
+    <h1>Halo, aku ...</h1>
 
-<style>
-  body {
-    font-family: sans-serif;
-    text-align: center;
-    padding-top: 40px;
-  }
-</style>`,
+    <!-- <p> = paragraph -->
+    <p>Ini website pertamaku!</p>
+
+    <!-- <img> = picture -->
+    <img src="brand/logo.svg" width="80">
+
+    <!-- <a> = clickable link -->
+    <p><a href="https://wikipedia.org" target="_blank">Buka Wikipedia</a></p>
+
+    <!-- <button> = clickable button -->
+    <button>Klik aku</button>
+
+    <!-- TODO: tambahin tag kamu sendiri di sini -->
+
+  </body>
+</html>
+`,
       },
       {
         type: 'code',
-        name: 'latihan-2-kartu-profil',
-        description: 'Membuat kartu profil dengan CSS.',
-        task: 'Ubah warna, nama, dan emoji di kartu profil ini supaya mencerminkan dirimu!',
-        starter: `<div class="kartu">
-  <div class="foto">😎</div>
-  <h1>Nama Kamu</h1>
-  <p>Kelas 8 · Suka main game & coding</p>
-  <button>Follow</button>
-</div>
+        name: 'latihan-2-css-theskin',
+        description: 'CSS #theskin: color, background, font-size, margin/padding.',
+        task: 'CSS = #theskin. Ubah color, background, font-size, dan margin/padding sampai websitenya keliatan gud ✨',
+        starter: `<html>
+  <body>
+    <h1>Halo, aku ...</h1>
+    <p>Aku lagi belajar CSS di Kodita!</p>
+    <button>Klik aku</button>
+  </body>
 
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    display: grid;
-    place-items: center;
-    background: linear-gradient(135deg, #6a5cff, #00c6ff);
-    font-family: sans-serif;
-  }
-  .kartu {
-    background: white;
-    padding: 32px 40px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  }
-  .foto { font-size: 64px; }
-  h1 { margin: 8px 0 4px; }
-  p { color: gray; }
-  button {
-    margin-top: 12px;
-    padding: 10px 28px;
-    border: none;
-    border-radius: 999px;
-    background: #6a5cff;
-    color: white;
-    font-size: 16px;
-  }
-</style>`,
+  <style>
+    body {
+      background: #fdf6e3;   /* background = fill color */
+      padding: 40px;          /* padding = spacing di dalam */
+      font-family: sans-serif;
+    }
+    h1 {
+      color: #333333;         /* color = text color */
+      font-size: 32px;        /* font-size = size of font */
+    }
+    p {
+      color: gray;
+      margin-bottom: 24px;    /* margin = spacing di luar */
+    }
+    button {
+      background: white;
+      color: black;
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+    /* TODO: ganti warna & ukurannya sesukamu! */
+  </style>
+</html>
+`,
       },
       {
-        type: 'quiz',
-        name: 'Kuis Web Dev',
-        description: '5 pertanyaan seputar HTML & CSS.',
-        questions: [
-          { q: 'HTML dipakai untuk…', options: ['Mewarnai halaman', 'Membuat kerangka & isi halaman', 'Membuat game 3D', 'Mengedit foto'], answer: 1 },
-          { q: 'Tag untuk judul paling besar adalah…', options: ['<p>', '<title>', '<h1>', '<big>'], answer: 2 },
-          { q: 'Properti CSS untuk mengubah warna tulisan adalah…', options: ['color', 'background', 'font', 'text-color'], answer: 0 },
-          { q: 'Tag <img> dipakai untuk menampilkan…', options: ['Video', 'Gambar', 'Tombol', 'Link'], answer: 1 },
-          { q: 'Bahasa yang membuat website bisa interaktif adalah…', options: ['HTML', 'CSS', 'JavaScript', 'Excel'], answer: 2 },
-        ],
+        type: 'code',
+        name: 'latihan-3-js-thebrain',
+        description: 'JS #thebrain: variable, function, if else, event listener, console.log().',
+        task: 'JS = #thebrain. Klik tombolnya dan lihat Console di bawah preview. Lalu ubah angka 5 jadi 10 dan ganti pesannya!',
+        starter: `<html>
+  <body>
+    <h1>Klik counter</h1>
+    <p id="teks">Kamu belum klik sama sekali</p>
+    <button id="tombol">Klik aku</button>
+  </body>
+
+  <script>
+    // variable = labeled box for data
+    let jumlahKlik = 0;
+    const tombol = document.getElementById('tombol');
+    const teks = document.getElementById('teks');
+
+    // function = reusable block of actions
+    function tambahKlik() {
+      jumlahKlik = jumlahKlik + 1;
+
+      // if else = decision
+      if (jumlahKlik >= 5) {
+        teks.textContent = 'Wih, kamu udah klik ' + jumlahKlik + ' kali! 🔥';
+      } else {
+        teks.textContent = 'Kamu klik ' + jumlahKlik + ' kali';
+      }
+
+      // console.log() = print a msg to check things
+      console.log('jumlahKlik sekarang:', jumlahKlik);
+    }
+
+    // event listener = react when there's an event
+    tombol.addEventListener('click', tambahKlik);
+  </script>
+
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 40px; }
+    button { font-size: 18px; padding: 10px 24px; }
+  </style>
+</html>
+`,
+      },
+      {
+        type: 'code',
+        name: 'challenge-website-pertamaku',
+        description: 'Challenge: gabungin HTML + CSS + JS jadi website tentang dirimu.',
+        task: 'Challenge! Bikin website tentang dirimu: minimal 3 tag HTML (#thebones), 3 properti CSS (#theskin), dan 1 event listener JS (#thebrain). Kalau sudah: copy kodenya ke VSCode sebagai index.html, lalu upload ke GitHub (git init → git add . → git commit → git push).',
+        starter: `<html>
+  <body>
+    <!-- #thebones: isi websitemu -->
+    <h1>Nama Kamu</h1>
+    <p>Kelas ... · suka ...</p>
+    <button id="tombol">Sapa aku</button>
+  </body>
+
+  <style>
+    /* #theskin: bikin websitemu keren */
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+  </style>
+
+  <script>
+    // #thebrain: bikin websitemu bisa ngapa-ngapain
+    const tombol = document.getElementById('tombol');
+    tombol.addEventListener('click', function () {
+      console.log('tombol diklik!');
+      // TODO: ubah sesuatu di halaman waktu tombolnya diklik
+    });
+  </script>
+</html>
+`,
       },
     ],
   },
 
   // ───────────────────────────── ABOUT ─────────────────────────────
+  // Slides come from the Canva deck "</kodita>" (public/media/tentang-kodita/).
   {
     type: 'slides',
     name: 'Tentang Kodita',
-    description: 'Perkenalan Kodita.',
-    slides: [
-      { layout: 'title', title: 'Halo! Kami Kodita 👋', subtitle: 'Belajar coding itu seru' },
-      {
-        layout: 'bullets',
-        title: 'Apa itu Kodita?',
-        points: ['Proyek sosial untuk mengenalkan coding ke pelajar', 'Belajar lewat game & website', 'Tidak perlu pengalaman sebelumnya'],
-      },
-      {
-        layout: 'bullets',
-        title: 'Hari ini kita akan…',
-        points: ['🎮 Membuat game di Roblox Studio', '🌐 Membuat website sendiri', '🏆 Kuis berhadiah!'],
-      },
-      { layout: 'section', title: 'Yuk mulai!', subtitle: 'Buka folder Game Dev atau Web Dev di desktop' },
-    ],
+    description: 'Perkenalan Kodita: apa itu Kodita dan kenapa harus join.',
+    slides: canvaPages('tentang-kodita', [
+      'Halo adix adix',
+      'Selamat datang di..',
+      '</kodita>',
+      'Apa itu </kodita>? Note: koding praditaa',
+      'Ngoding? programming? game making? googling? overthinking? debugging? web-dev..ing? stressing?',
+      'SEMUANYAA!!',
+      'Komunitas keren, santai, dan asik',
+      'Cocok buat kamu yang tertarik sama: web dev, game dev',
+      'Emangnya kalau join, bisa ngebuat apa aja?',
+      'Contoh project web',
+      'Contoh project web',
+      'Contoh project game',
+      'Other activity yang gacorrr: Hackclub? Hackathon?',
+      'Why you should join? Prepare for your computer science internal assessment, kakaknya atmin web pdc, soft skill hard skill, portofolio, bisa jadi software engineer, dibilang hengker karna bisa ngoding, and lastly, have FUN!!!!',
+    ]),
   },
 ];
 

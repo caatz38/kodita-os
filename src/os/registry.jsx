@@ -1,7 +1,7 @@
 // Which app opens which file type, and which icon each one gets.
 import {
   FolderIcon, ExplorerIcon, SettingsIcon, NotepadIcon, SlidesAppIcon, CodeAppIcon,
-  MediaAppIcon, PhotosAppIcon, QuizAppIcon, RecycleBinIcon, ThisPCIcon, FileIcon, PlaceIcon,
+  MediaAppIcon, PhotosAppIcon, RecycleBinIcon, ThisPCIcon, FileIcon, PlaceIcon,
 } from './Icons.jsx';
 
 export const APPS = {
@@ -10,7 +10,6 @@ export const APPS = {
   code: { name: 'Code Lab', Icon: CodeAppIcon },
   media: { name: 'Media Player', Icon: MediaAppIcon },
   photos: { name: 'Photos', Icon: PhotosAppIcon },
-  quiz: { name: 'Quiz', Icon: QuizAppIcon },
   notepad: { name: 'Notepad', Icon: NotepadIcon },
   settings: { name: 'Settings', Icon: SettingsIcon },
 };
