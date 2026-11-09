@@ -38,7 +38,9 @@ Every push to `main` rebuilds and publishes the site to GitHub Pages automatical
 
 ## Edit the lessons
 
-All lesson content lives in **`src/content/lessons.js`**: folders, slides, quizzes and coding exercises. The top of that file explains every item type. Put images and videos in `public/media/`.
+All lesson content lives in **`src/content/lessons.js`**: folders, slide decks and coding exercises (latihan). The top of that file explains every item type.
+
+The slide decks are **embedded live from Canva** (`canva: 'https://www.canva.com/design/<id>/<token>'`), so editing a design in Canva updates Kodita OS automatically. The designs must be shared as *Anyone with the link*, and showing them needs internet. During a presentation, click the slide once, then use the arrow keys or a clicker.
 
 Other settings (user name, logo, default theme, boot screen) are in **`src/content/config.js`**. Replace `public/brand/logo.svg` with your own logo.
 

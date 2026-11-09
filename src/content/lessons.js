@@ -5,6 +5,8 @@
 //  Item types (and the app that opens them):
 //    folder  → File Explorer     { type:'folder', name, children:[...] }
 //    slides  → Slides            { type:'slides', name, slides:[...] }
+//                                or a live Canva deck: { type:'slides', name, canva:'https://www.canva.com/design/<id>/<token>' }
+//                                (the design must be shared as 'Anyone with the link'; needs internet)
 //    code    → Code Lab          { type:'code',   name, task, starter }
 //    video   → Media Player      { type:'video',  name, src:'media/demo.mp4' }  or  { youtube:'VIDEO_ID' }
 //    image   → Photos            { type:'image',  name, src:'media/foto.png' }
@@ -23,16 +25,9 @@
 //  Optional on any item:  description:'...'  (shown in Explorer's Details pane)
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Turns a folder of exported slide images (page-01.jpg, page-02.jpg, …) into slides.
-function canvaPages(folder, texts) {
-  return texts.map((alt, i) => ({ layout: 'full', image: `media/${folder}/page-${String(i + 1).padStart(2, '0')}.jpg`, alt }));
-}
-
 export const desktop = [
   // ───────────────────────────── GAME DEV ─────────────────────────────
-  // Slides come from the Canva deck "Roblox Step Coding" (exported as images
-  // into public/media/roblox-step-coding/). To update: re-export the pages
-  // from Canva with the same file names.
+  // Slides are embedded live from Canva — edit the design in Canva and it updates here.
   {
     type: 'folder',
     name: 'Game Dev',
@@ -42,28 +37,13 @@ export const desktop = [
         type: 'slides',
         name: 'Roblox Step Coding',
         description: 'Roblox Studio intro, tools & navigation, step coding lava, shortcut & challenge.',
-        slides: canvaPages('roblox-step-coding', [
-          'Roblox Studio Gamedev — Roblox Step Coding',
-          'What you’ll learn today: Roblox Studio Intro, Tools & Navigation, Step Coding Lava, Shortcut & Challenge',
-          'Roblox Studio itu apa sih? Game engine buat bikin game Roblox. Semua game Roblox yang kamu lihat dibikin di sini.',
-          'Cara aksesnya gimana? 2 cara, yaitu lewat website atau download langsung.',
-          '3 Main Panels: Viewport, Explorer, Properties',
-          'Yang biasa digunakan — Penting!!',
-          'Tutor gerakin camera + jalan: nengok = klik kanan (tahan) + geser mouse; maju mundur kanan kiri = W, A, S, D; naik turun = E dan Q; zoom = scroll mouse.',
-          'Shortcut: Undo ⌘Z, Redo ⌘⇧Z, Copy ⌘C, Paste ⌘V, Cut ⌘X, Duplicate ⌘D, Save ⌘S, Find ⌘F, Replace ⌘⌥F, Close Script ⌘W, Reopen Closed Script ⌘⇧T',
-          'Terus cara kita koding-kodingan gimana kak?',
-          'Ini nih: klik tombol “+”, muncul deh. Roblox memakai bahasa pemrograman Lua!',
-          'Contoh penggunaan Lua: digunakan sebagai “Lava” dalam obby. Udah, segini aja? Memang.',
-          'Today’s problem: kalau misalkan player dengan 101 health menyentuh lava, dia hidup atau tidak?',
-          'Roblox Studio — Lesson Completed!',
-        ]),
+        canva: 'https://www.canva.com/design/DAHZBSAdjbs/Zxb9yPGkj_Zs5_IETjKJXw',
       },
     ],
   },
 
   // ───────────────────────────── WEB DEV ─────────────────────────────
-  // Slides come from the Canva deck "</kodita> | WD | Lesson 1"
-  // (exported as images into public/media/web-dev-lesson-1/).
+  // Slides are embedded live from the Canva deck "</kodita> | WD | Lesson 1".
   // The latihan follow the deck: HTML #thebones → CSS #theskin → JS #thebrain → Challenge.
   {
     type: 'folder',
@@ -74,27 +54,7 @@ export const desktop = [
         type: 'slides',
         name: 'Web Dev Lesson 1',
         description: 'What is website development, VSCode, HTML/CSS/JS basic, challenge, GitHub.',
-        slides: canvaPages('web-dev-lesson-1', [
-          'Web Development Lesson 1 — Web Dev Introduction: HTML CSS JS Basic',
-          'What you’ll learn today: What is Website Development, VSCode, HTML basic, CSS basic, JS basic, Challenge, GitHub',
-          'What is WebDev? HTML? CSS? JavaScript? GitHub? Inspect? VSCode?',
-          'Let’s start with inspecting elements in wikipedia.org — wait, how to enable developer mode?',
-          'Chrome: View → Developer → Developer Tools / Inspect Elements',
-          'Safari: Develop → Show Page Source / Inspect Element',
-          'Inspecting Wikipedia with developer tools',
-          'So the conclusion is: every website you visited is actually just a mix of HTML + CSS + JS',
-          'What is HTML? CSS? JS? HTML = the skeleton of a webpage (#thebones). CSS = the design that makes HTML look good (#theskin). JS = the brain that makes pages do things, like reacting to clicks (#thebrain).',
-          'HTML #thebones: <html> wraps the whole page, <h1> big heading, <p> paragraph, <img> picture input, <a> clickable link, <button> clickable button',
-          'CSS #theskin: color = text color, background = fill color, font-size = size of font, margin/padding = spacing stuff',
-          'JS #thebrain: variable = labeled box for data, function = reusable block of actions, if else = decision, event listener = react when there’s an event, console.log() = print a message to check things',
-          'The bigboss: FRONTEND = what you see (layout, colors, buttons). BACKEND = what happens behind the scenes (servers, databases) — we’ll save this for later. Together: WEBSITE.',
-          'git init / git branch -M main / git remote add origin <PASTE_YOUR_REMOTE_REPOSITORY_URL> / git add . / git commit -m "..." / git push -u origin main',
-          'Btw, where can we code??',
-          'Well.. hi I’m VSCode: a free source code editor to write, edit, test and debug code. Hi I’m GitHub: a cloud-based platform to store, share and collaborate on projects — and I can help you publish your website!',
-          'What to do next: VSCode — code.visualstudio.com, next next next, create a file named index.html. GitHub — github.com, create repo.',
-          'Web Development Lesson 1 — Lesson Completed!',
-          'Challenge',
-        ]),
+        canva: 'https://www.canva.com/design/DAHSU9ywGsY/5fOD_TcRkWaw0VCNhqp9gA',
       },
       {
         type: 'code',
@@ -242,27 +202,12 @@ export const desktop = [
   },
 
   // ───────────────────────────── ABOUT ─────────────────────────────
-  // Slides come from the Canva deck "</kodita>" (public/media/tentang-kodita/).
+  // Slides are embedded live from the Canva deck "</kodita>".
   {
     type: 'slides',
     name: 'Tentang Kodita',
     description: 'Perkenalan Kodita: apa itu Kodita dan kenapa harus join.',
-    slides: canvaPages('tentang-kodita', [
-      'Halo adix adix',
-      'Selamat datang di..',
-      '</kodita>',
-      'Apa itu </kodita>? Note: koding praditaa',
-      'Ngoding? programming? game making? googling? overthinking? debugging? web-dev..ing? stressing?',
-      'SEMUANYAA!!',
-      'Komunitas keren, santai, dan asik',
-      'Cocok buat kamu yang tertarik sama: web dev, game dev',
-      'Emangnya kalau join, bisa ngebuat apa aja?',
-      'Contoh project web',
-      'Contoh project web',
-      'Contoh project game',
-      'Other activity yang gacorrr: Hackclub? Hackathon?',
-      'Why you should join? Prepare for your computer science internal assessment, kakaknya atmin web pdc, soft skill hard skill, portofolio, bisa jadi software engineer, dibilang hengker karna bisa ngoding, and lastly, have FUN!!!!',
-    ]),
+    canva: 'https://www.canva.com/design/DAHPQlgw9G0/zPUqK_-YcUOCfy47g4GkuQ',
   },
 ];
 

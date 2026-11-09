@@ -92,7 +92,96 @@ export function Slide({ slide, index, total, thumb = false }) {
 
 function Slides({ item, winId }) {
   if (!item) return <Picker type="slides" title="Presentations" winId={winId} />;
+  if (item.canva) return <CanvaDeck key={item.id} item={item} />;
   return <Deck key={item.id} item={item} />;
+}
+
+// Canva design link → embed URL. Accepts ".../design/<id>/<token>" with or without "/view" or "/edit".
+export function canvaEmbedUrl(link) {
+  const m = String(link).match(/canva\.com\/design\/([^/?#]+)\/([^/?#]+)/);
+  return m ? `https://www.canva.com/design/${m[1]}/${m[2]}/view?embed` : link;
+}
+
+// A live, embedded Canva presentation (always shows the latest version from Canva).
+function CanvaDeck({ item }) {
+  const stageRef = useRef(null);
+  const frameRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+  const [online, setOnline] = useState(() => navigator.onLine !== false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [engaged, setEngaged] = useState(false); // has the presenter clicked into the deck yet?
+  const src = canvaEmbedUrl(item.canva);
+
+  // Clicking into Canva moves focus to the iframe (the page "blurs") → keys now reach Canva.
+  useEffect(() => {
+    const onBlur = () => setTimeout(() => {
+      if (document.activeElement === frameRef.current) setEngaged(true);
+    }, 0);
+    window.addEventListener('blur', onBlur);
+    return () => window.removeEventListener('blur', onBlur);
+  }, []);
+
+  useEffect(() => {
+    const on = () => setOnline(true);
+    const off = () => setOnline(false);
+    const onFs = () => setFullscreen(document.fullscreenElement === stageRef.current);
+    window.addEventListener('online', on);
+    window.addEventListener('offline', off);
+    document.addEventListener('fullscreenchange', onFs);
+    return () => {
+      window.removeEventListener('online', on);
+      window.removeEventListener('offline', off);
+      document.removeEventListener('fullscreenchange', onFs);
+    };
+  }, []);
+
+  // Note: a page can't move keyboard focus *inside* Canva's player (cross-origin),
+  // so the presenter clicks the slide once — after that arrows/clickers go to Canva.
+
+  const present = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else stageRef.current?.requestFullscreen?.().catch(() => {});
+  };
+
+  return (
+    <div className="slides-app slides-canva" tabIndex={-1} data-autofocus>
+      <div className="slides-toolbar">
+        <span className="slides-canva-badge">Canva</span>
+        <span className="slides-title">{item.name}</span>
+        {!engaged && loaded && <span className="slides-canva-hint">👆 Klik slide sekali, lalu pakai ← → atau clicker</span>}
+        <button className="slides-present" onClick={present} title="Present (fullscreen)">
+          <Play20Filled /> Present
+        </button>
+      </div>
+      <div className={`slides-main slides-stage ${fullscreen ? 'is-fullscreen' : ''}`} ref={stageRef}>
+        {online ? (
+          <div className="slides-canva-frame">
+            <iframe
+              ref={frameRef}
+              title={item.name}
+              src={src}
+              allow="fullscreen"
+              allowFullScreen
+              onLoad={() => setLoaded(true)}
+            />
+            {!loaded && (
+              <div className="slides-canva-loading">
+                <span className="slides-spinner" /> Memuat slide dari Canva…
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="slides-canva-offline">
+            <strong>Butuh internet</strong>
+            <span>Slide ini diambil langsung dari Canva. Sambungkan ke internet lalu buka lagi.</span>
+          </div>
+        )}
+        {fullscreen && (
+          <button className="slides-exit" onClick={present} title="Exit (Esc)"><FullScreenMinimize20Regular /></button>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function Deck({ item }) {

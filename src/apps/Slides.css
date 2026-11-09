@@ -284,3 +284,57 @@
 .hl-selector { color: #67d4ff; }
 .hl-prop { color: #ffd166; }
 .hl-value { color: #a5e07a; }
+
+/* ───────── Embedded Canva decks ───────── */
+.slides-canva-badge {
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00c4cc, #7d2ae8);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.slides-canva-hint { font-size: 12px; color: var(--text-2); margin-right: 8px; white-space: nowrap; animation: canva-hint 1.6s ease-in-out infinite; }
+@keyframes canva-hint { 50% { opacity: 0.45; } }
+.slides-canva-frame {
+  position: relative;
+  width: min(100cqw - 40px, (100cqh - 40px) * 16 / 9);
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 12px 36px rgba(10, 30, 80, 0.22), 0 0 0 0.5px rgba(0, 0, 0, 0.08);
+}
+.slides-canva-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.slides-stage.is-fullscreen .slides-canva-frame { width: min(100cqw, 100cqh * 16 / 9); border-radius: 0; box-shadow: none; }
+.slides-canva-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 14px;
+  background: #1b1c27;
+}
+.slides-spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  animation: slides-spin 0.8s linear infinite;
+}
+@keyframes slides-spin { to { transform: rotate(360deg); } }
+.slides-canva-offline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 420px;
+  text-align: center;
+  color: var(--text-2);
+}
+.slides-canva-offline strong { font-size: 18px; color: var(--text); }
