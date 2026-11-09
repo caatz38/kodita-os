@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="34 146 374 172">
+  <!-- Kodita logo for small sizes: same shape, bolder strokes, tight crop -->
+  <g fill="none" stroke="#000" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M118 193 L53 226.5 L118 260" />
+    <path d="M188.5 163 L131 301" />
+    <path d="M215.5 170 V270.5" />
+    <path d="M275 209 L222 245.5" />
+    <path d="M237 233 L274 270" />
+    <path d="M323.5 193 L389 226.5 L323.5 260" />
+  </g>
+</svg>

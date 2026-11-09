@@ -1,8 +1,10 @@
 // Kodita OS settings — edit these freely.
 export const config = {
-  userName: 'lio',
-  // Put your logo in public/brand/ and change this path (e.g. 'brand/logo.png').
+  userName: 'admin',
+  // Kodita logo </k>. `logo` is used at large sizes (boot, lock screen, Settings),
+  // `logoIcon` (bolder strokes, tight crop) at small sizes (Start button, menus, browser tab).
   logo: 'brand/logo.svg',
+  logoIcon: 'brand/logo-icon.svg',
   // Main accent color (buttons, highlights). Tune it to match the Kodita logo.
   accent: '#005fb8',
   wallpaper: 'wallpapers/bloom.jpg',

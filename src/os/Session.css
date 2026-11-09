@@ -50,7 +50,7 @@
 }
 
 /* Boot */
-.ss-boot-logo { width: 110px; height: 110px; margin-top: -60px; animation: ss-fade-in 0.8s ease both; }
+.ss-boot-logo { width: 190px; height: 190px; margin-top: -60px; animation: ss-fade-in 0.8s ease both; }
 .ss-boot-spin { position: absolute; left: 50%; top: 72%; transform: translateX(-50%); animation: ss-fade-in 0.6s 0.6s ease both; }
 
 /* Lock + sign-in */
@@ -85,7 +85,7 @@
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
 }
-.ss-avatar img { width: 96px; height: 96px; }
+.ss-avatar img { width: 130px; height: 130px; }
 .ss-user { font-size: 30px; font-weight: 600; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3); }
 .ss-signin-btn {
   display: flex;

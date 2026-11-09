@@ -68,7 +68,7 @@ function Boot({ onDone }) {
   }, []);
   return (
     <div className="ss ss-black" onClick={onDone}>
-      <img className="ss-boot-logo" src={config.logo} alt="" />
+      <img className="ss-boot-logo kodita-logo" src={config.logo} alt="" />
       <div className="ss-boot-spin"><Spinner /></div>
     </div>
   );
@@ -107,7 +107,7 @@ function Lock({ state, setState }) {
       {/* sign-in layer (blurred wallpaper) */}
       <div className="ss-signin-bg" style={{ backgroundImage: `url(${wallpaper})` }} />
       <div className={`ss-signin ${phase !== 'lock' ? 'show' : ''}`}>
-        <div className="ss-avatar"><img src={config.logo} alt="" /></div>
+        <div className="ss-avatar"><img className="kodita-logo" src={config.logo} alt="" /></div>
         <div className="ss-user">{config.userName}</div>
         {phase === 'welcome' ? (
           <div className="ss-welcome"><Spinner size={28} /> Welcome</div>

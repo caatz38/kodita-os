@@ -254,7 +254,7 @@ export default function StartMenu() {
 
       <div className="start-footer">
         <button className="start-user" onClick={userMenu}>
-          <span className="start-avatar"><Logo src={config.logo} size={20} /></span>
+          <span className="start-avatar"><Logo src={config.logoIcon} size={22} wide /></span>
           <span>{config.userName}</span>
         </button>
         <button className="start-power" title="Power" onClick={powerMenu}>

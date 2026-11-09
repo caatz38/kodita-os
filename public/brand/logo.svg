@@ -1,15 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <!-- Placeholder Kodita logo. Replace this file (or add logo.png and update src/content/config.js). -->
-  <defs>
-    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3ccbf4"/><stop offset="1" stop-color="#0a6ad8"/>
-    </linearGradient>
-    <linearGradient id="b" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#ff6a3d"/>
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="21" height="21" rx="4" fill="url(#a)"/>
-  <rect x="25" y="2" width="21" height="21" rx="10.5" fill="url(#b)"/>
-  <rect x="2" y="25" width="21" height="21" rx="4" fill="url(#a)"/>
-  <rect x="25" y="25" width="21" height="21" rx="4" fill="url(#a)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="36 47 370 370">
+  <!-- Kodita logo: </k> -->
+  <g fill="none" stroke="#000" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M118 193 L53 226.5 L118 260" />
+    <path d="M188.5 163 L131 301" />
+    <path d="M215.5 170 V270.5" />
+    <path d="M275 209 L222 245.5" />
+    <path d="M237 233 L274 270" />
+    <path d="M323.5 193 L389 226.5 L323.5 260" />
+  </g>
 </svg>

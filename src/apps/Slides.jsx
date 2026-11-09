@@ -22,7 +22,7 @@ export function Slide({ slide, index, total, thumb = false }) {
         <>
           <div className="sl-blob sl-blob-a" />
           <div className="sl-blob sl-blob-b" />
-          <div className="sl-brand"><img src={config.logo} alt="" /> Kodita</div>
+          <div className="sl-brand"><img className="kodita-logo" src={config.logoIcon} alt="" /> Kodita</div>
           <div className="sl-center">
             <h1 className="sl-anim">{slide.title}</h1>
             {slide.subtitle && <p className="sl-anim" style={{ '--i': 1 }}>{slide.subtitle}</p>}
@@ -82,7 +82,7 @@ export function Slide({ slide, index, total, thumb = false }) {
 
       {layout !== 'title' && layout !== 'section' && layout !== 'full' && (
         <div className="sl-footer">
-          <span><img src={config.logo} alt="" /> Kodita</span>
+          <span><img className="kodita-logo" src={config.logoIcon} alt="" /> Kodita</span>
           <span>{index + 1} / {total}</span>
         </div>
       )}

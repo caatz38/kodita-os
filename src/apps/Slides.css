@@ -167,7 +167,7 @@
   font-weight: 600;
   letter-spacing: 0.02em;
 }
-.sl-brand img { width: 2.6cqi; height: 2.6cqi; }
+.sl-brand img { width: 4.4cqi; height: auto; }
 
 /* section */
 .sl-section { background: #0b1437; color: #fff; }
@@ -268,7 +268,7 @@
   font-family: var(--font);
 }
 .sl-footer span { display: flex; align-items: center; gap: 0.7cqi; }
-.sl-footer img { width: 1.6cqi; height: 1.6cqi; }
+.sl-footer img { width: 2.8cqi; height: auto; }
 
 /* syntax colors */
 .hl-keyword { color: #ff7ab2; }

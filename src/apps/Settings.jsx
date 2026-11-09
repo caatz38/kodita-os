@@ -211,7 +211,7 @@ function AccountsPage() {
   return (
     <>
       <div className="st-card st-account">
-        <span className="st-avatar st-avatar-lg"><img src={config.logo} alt="" /></span>
+        <span className="st-avatar st-avatar-lg"><img className="kodita-logo" src={config.logo} alt="" /></span>
         <div><strong>{config.userName}</strong><small>Local account</small><small>Administrator</small></div>
       </div>
       <Row icon={<Person20Regular />} title="Your info" desc="Profile photo" onClick={() => {}} />
@@ -317,7 +317,7 @@ function Settings({ props }) {
     <div className="st" data-autofocus tabIndex={-1}>
       <aside className="st-nav">
         <div className="st-user">
-          <span className="st-avatar"><img src={config.logo} alt="" /></span>
+          <span className="st-avatar"><img className="kodita-logo" src={config.logo} alt="" /></span>
           <span><strong>{config.userName}</strong><small>Local Account</small></span>
         </div>
         <label className="st-search">

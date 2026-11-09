@@ -118,7 +118,7 @@ export default function Taskbar() {
           data-start-toggle
           onClick={() => toggleStart()}
         >
-          <Logo src={config.logo} size={24} />
+          <Logo src={config.logoIcon} size={30} wide />
         </button>
         <button className="tb-search" data-start-toggle onClick={() => toggleStart('')}>
           <Search20Regular />

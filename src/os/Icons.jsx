@@ -278,8 +278,20 @@ export function FileIcon({ size, kind = 'text' }) {
 }
 
 // Kodita logo (from config) as an <img>.
-export function Logo({ src, size = 24, style }) {
-  return <img src={src} width={size} height={size} alt="" draggable={false} style={{ display: 'block', ...style }} />;
+// Kodita logo (from config). The logo is black; CSS turns it white on dark backgrounds.
+// Pass `wide` for the tight, bold small-size version (keeps its width, height follows).
+export function Logo({ src, size = 24, wide = false, style }) {
+  return (
+    <img
+      className="kodita-logo"
+      src={src}
+      width={size}
+      height={wide ? undefined : size}
+      alt=""
+      draggable={false}
+      style={{ display: 'block', ...(wide ? { height: 'auto' } : null), ...style }}
+    />
+  );
 }
 
 // Colored "special" folders (Desktop, Downloads, Documents…) like Windows 11's library folders.
