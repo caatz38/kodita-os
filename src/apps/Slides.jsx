@@ -109,17 +109,8 @@ function CanvaDeck({ item }) {
   const [loaded, setLoaded] = useState(false);
   const [online, setOnline] = useState(() => navigator.onLine !== false);
   const [fullscreen, setFullscreen] = useState(false);
-  const [engaged, setEngaged] = useState(false); // has the presenter clicked into the deck yet?
   const src = canvaEmbedUrl(item.canva);
 
-  // Clicking into Canva moves focus to the iframe (the page "blurs") → keys now reach Canva.
-  useEffect(() => {
-    const onBlur = () => setTimeout(() => {
-      if (document.activeElement === frameRef.current) setEngaged(true);
-    }, 0);
-    window.addEventListener('blur', onBlur);
-    return () => window.removeEventListener('blur', onBlur);
-  }, []);
 
   useEffect(() => {
     const on = () => setOnline(true);
@@ -146,9 +137,7 @@ function CanvaDeck({ item }) {
   return (
     <div className="slides-app slides-canva" tabIndex={-1} data-autofocus>
       <div className="slides-toolbar">
-        <span className="slides-canva-badge">Canva</span>
         <span className="slides-title">{item.name}</span>
-        {!engaged && loaded && <span className="slides-canva-hint">👆 Klik slide sekali, lalu pakai ← → atau clicker</span>}
         <button className="slides-present" onClick={present} title="Present (fullscreen)">
           <Play20Filled /> Present
         </button>
@@ -166,14 +155,14 @@ function CanvaDeck({ item }) {
             />
             {!loaded && (
               <div className="slides-canva-loading">
-                <span className="slides-spinner" /> Memuat slide dari Canva…
+                <span className="slides-spinner" /> Memuat slide..
               </div>
             )}
           </div>
         ) : (
           <div className="slides-canva-offline">
             <strong>Butuh internet</strong>
-            <span>Slide ini diambil langsung dari Canva. Sambungkan ke internet lalu buka lagi.</span>
+            <span>Sambungkan ke internet lalu buka lagi.</span>
           </div>
         )}
         {fullscreen && (
